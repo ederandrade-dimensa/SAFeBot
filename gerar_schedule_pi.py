@@ -18,6 +18,10 @@ Regras de início (quando for gerar):
 - Se não existir:
     start = PLANNING_INTERVAL_START_DATE (obrigatória; ajusta para próximo dia útil)
 
+Exceção:
+- Se PLANNING_INTERVAL_START_DATE estiver no futuro e não existir PI ativo nessa data,
+  ignora-se a regra da janela de 5 dias para permitir pré-geração.
+
 Variáveis de ambiente úteis:
 - PLANNING_INTERVAL_START_DATE   -> data ISO (YYYY-MM-DD) usada quando não existe schedule
 - PLANING_INTERVAL_FILE          -> caminho do YAML do PI (default: planing-interval.yaml)
@@ -29,7 +33,7 @@ import os
 import sys
 from pathlib import Path
 from datetime import date, datetime, timedelta
-from typing import List, Dict, Any, Optional, Set, Iterable
+from typing import List, Dict, Any, Optional, Set
 
 import yaml
 
@@ -120,76 +124,58 @@ def _parece_item_pi(o: Any) -> bool:
     return isinstance(o, dict) and _REQUIRED_FIELDS.issubset(set(map(str, o.keys())))
 
 def _extrair_lista_se_for_tabela(obj: Any) -> Optional[List[Dict[str, Any]]]:
-    if isinstance(obj, list) and obj and all(isinstance(x, dict) for x in obj):
-        # Aceita lista vazia também, mas aqui exigimos que tenha os campos esperados quando houver itens
-        if not obj:  # lista vazia (cairia no if anterior), mas mantemos para clareza
+    if isinstance(obj, list) and all(isinstance(x, dict) for x in obj):
+        if not obj:
             return obj
         if all(_parece_item_pi(x) for x in obj):
             return obj
     return None
 
 def _buscar_tabela_recursivo(obj: Any, trilha: str = "root") -> Optional[List[Dict[str, Any]]]:
-    """
-    Varre recursivamente o objeto em busca de uma lista de dicts contendo
-    ao menos os campos essenciais ('dia', 'sprint', 'dia_sprint').
-    """
     cand = _extrair_lista_se_for_tabela(obj)
     if cand is not None:
         return cand
 
     if isinstance(obj, dict):
-        for k, v in obj.items():
+        for _, v in obj.items():
             achado = _extrair_lista_se_for_tabela(v)
             if achado is not None:
                 return achado
-        # busca mais profunda
-        for k, v in obj.items():
-            achado = _buscar_tabela_recursivo(v, f"{trilha}.{k}")
+        for _, v in obj.items():
+            achado = _buscar_tabela_recursivo(v, trilha)
             if achado is not None:
                 return achado
 
     if isinstance(obj, list):
-        for idx, item in enumerate(obj):
-            achado = _buscar_tabela_recursivo(item, f"{trilha}[{idx}]")
+        for item in obj:
+            achado = _buscar_tabela_recursivo(item, trilha)
             if achado is not None:
                 return achado
 
     return None
 
 def carregar_pi_tabela(caminho: Path) -> List[Dict[str, Any]]:
-    """
-    Tenta vários formatos:
-      1) raiz['pi']['tabela']
-      2) raiz['tabela']
-      3) raiz é uma lista de itens com (dia, sprint, dia_sprint)
-      4) busca recursiva por qualquer lista de itens com esses campos
-    """
     dados = ler_yaml(caminho)
 
-    # 1) pi.tabela
     if isinstance(dados, dict) and "pi" in dados and isinstance(dados["pi"], dict) and "tabela" in dados["pi"]:
         tbl = _extrair_lista_se_for_tabela(dados["pi"]["tabela"])
         if tbl is not None:
             return list(tbl)
 
-    # 2) tabela na raiz
     if isinstance(dados, dict) and "tabela" in dados:
         tbl = _extrair_lista_se_for_tabela(dados["tabela"])
         if tbl is not None:
             return list(tbl)
 
-    # 3) raiz é lista
     if isinstance(dados, list):
         tbl = _extrair_lista_se_for_tabela(dados)
         if tbl is not None:
             return list(tbl)
 
-    # 4) busca recursiva
     tbl = _buscar_tabela_recursivo(dados)
     if tbl is not None:
         return list(tbl)
 
-    # Erro com diagnóstico útil
     msg = [
         "Estrutura de planing-interval.yaml inesperada.",
         "O script procura por uma lista de itens contendo as chaves: 'dia', 'sprint', 'dia_sprint'.",
@@ -200,45 +186,24 @@ def carregar_pi_tabela(caminho: Path) -> List[Dict[str, Any]]:
 
 # ----------------- Lógica de negócio ------------------------
 def escolher_data_inicio(ult_data: Optional[date], env_str: Optional[str], feriados_set: Set[date]) -> date:
-    """
-    Define a data de início considerando:
-    - Se houver schedule existente, começa no próximo dia útil após a última data,
-      a menos que a PLANNING_INTERVAL_START_DATE (ajustada) seja posterior à última data.
-    - Se NÃO houver schedule, começa na PLANNING_INTERVAL_START_DATE (obrigatória),
-      mas com a seguinte regra adicional:
-        * Se PLANNING_INTERVAL_START_DATE > hoje (America/Sao_Paulo), considerar 'hoje'.
-      Em ambos os casos, a data escolhida é ajustada ao próximo dia útil.
-    """
-    # Hoje em America/Sao_Paulo
     hoje = hoje_sao_paulo()
 
     def _env_dt_ajustada() -> date:
         if not env_str:
-            raise RuntimeError(
-                f"Variável de ambiente {ENV_START} é obrigatória quando o schedule ainda não existe."
-            )
-        # Converte a env var
+            raise RuntimeError(f"Variável de ambiente {ENV_START} é obrigatória quando o schedule ainda não existe.")
         dt_env = parse_data(env_str)
-        # Regra nova: se a env var estiver no futuro, considerar 'hoje'
-        if dt_env > hoje:
-            dt_env = hoje
-        # Ajusta para próximo dia útil
+        # Não truncamos mais — datas futuras são permitidas
         return proximo_dia_util(dt_env, feriados_set)
 
     if ult_data is not None:
-        # Ponto de partida padrão: dia útil seguinte à última data do schedule
         start = proximo_dia_util(ult_data + timedelta(days=1), feriados_set)
-
         if env_str:
             env_dt = _env_dt_ajustada()
-            # Mantém a semântica original: só usa a env var se for posterior à última data do schedule
             if env_dt > ult_data:
                 start = env_dt
         return start
 
-    # Não há schedule ainda: env var é obrigatória e passa pela regra nova
     return _env_dt_ajustada()
-
 
 def montar_descricao(item: Dict[str, Any]) -> str:
     partes = []
@@ -250,7 +215,6 @@ def montar_descricao(item: Dict[str, Any]) -> str:
 
 def gerar_um_pi(pi_tabela: List[Dict[str, Any]], start: date, feriados_set: Set[date]) -> List[Dict[str, Any]]:
     tabela = sorted(pi_tabela, key=lambda x: int(x.get("dia", 0)))
-
     saida = []
     data_corrente = start
 
@@ -271,25 +235,29 @@ def gerar_um_pi(pi_tabela: List[Dict[str, Any]], start: date, feriados_set: Set[
 
     return saida
 
-def deve_gerar_novo_pi(schedule: List[Dict[str, Any]]) -> bool:
+def deve_gerar_novo_pi(schedule: List[Dict[str, Any]], hoje: Optional[date] = None) -> bool:
     if not schedule:
         return True
     ultima = ultima_data_no_schedule(schedule)
     if not ultima:
         return True
+    if hoje is None:
+        hoje = hoje_sao_paulo()
     limite = ultima + timedelta(days=5)
-    return hoje_sao_paulo() > limite
+    return hoje > limite
+
+def has_pi_ativo_na_data(schedule: List[Dict[str, Any]], data: date) -> bool:
+    iso = data.isoformat()
+    return any(item.get("date") == iso for item in schedule)
 # ------------------------------------------------------------
 
 def main() -> None:
-    # --- feriados ---
     if not ARQ_FERIADOS.exists():
         print(f"ERRO: não encontrei {ARQ_FERIADOS}", file=sys.stderr)
         sys.exit(1)
     mapa_feriados = carregar_feriados(ARQ_FERIADOS)
     feriados_set = set(mapa_feriados.keys())
 
-    # --- PI ---
     if not ARQ_PI.exists():
         print(f"ERRO: não encontrei {ARQ_PI}", file=sys.stderr)
         sys.exit(1)
@@ -303,32 +271,44 @@ def main() -> None:
         print("ERRO ao interpretar planing-interval.yaml:\n" + str(e), file=sys.stderr)
         sys.exit(1)
 
-    # --- schedule ---
     schedule = carregar_schedule(ARQ_SCHEDULE)
-
-    # --- regra de janela de 5 dias ---
-    if not deve_gerar_novo_pi(schedule):
-        ultima = ultima_data_no_schedule(schedule)
-        limite = ultima + timedelta(days=5) if ultima else None
-        hoje = hoje_sao_paulo()
-        print("⚠️ Nenhum PI gerado.")
-        if ultima:
-            print(f"   Hoje: {hoje.isoformat()} | Fim do último PI: {ultima.isoformat()} | "
-                  f"Permitido gerar após: {limite.isoformat()}")
-        else:
-            print("   (Schedule existente porém sem data final identificável.)")
-        sys.exit(0)
-
-    # --- data de início ---
-    ult_data = ultima_data_no_schedule(schedule)
     env_str = os.environ.get(ENV_START)
+    hoje = hoje_sao_paulo()
+
+    env_dt_util: Optional[date] = None
+    if env_str:
+        try:
+            env_dt_util = proximo_dia_util(parse_data(env_str), feriados_set)
+        except Exception as e:
+            print("ERRO ao interpretar PLANNING_INTERVAL_START_DATE:\n" + str(e), file=sys.stderr)
+            sys.exit(1)
+
+    ignorar_janela = False
+    if env_dt_util is not None:
+        if env_dt_util > hoje and not has_pi_ativo_na_data(schedule, env_dt_util):
+            ignorar_janela = True
+
+    if not ignorar_janela:
+        if not deve_gerar_novo_pi(schedule, hoje):
+            ultima = ultima_data_no_schedule(schedule)
+            limite = ultima + timedelta(days=5) if ultima else None
+            print("⚠️ Nenhum PI gerado.")
+            if ultima:
+                print(f"   Hoje: {hoje.isoformat()} | Fim do último PI: {ultima.isoformat()} | "
+                      f"Permitido gerar após: {limite.isoformat()}")
+            else:
+                print("   (Schedule existente porém sem data final identificável.)")
+            sys.exit(0)
+
+    ult_data = ultima_data_no_schedule(schedule)
     try:
         start = escolher_data_inicio(ult_data, env_str, feriados_set)
+        if ignorar_janela and env_dt_util is not None:
+            start = env_dt_util
     except Exception as e:
         print("ERRO ao determinar data inicial:\n" + str(e), file=sys.stderr)
         sys.exit(1)
 
-    # --- gera 1 PI ---
     novo_pi = gerar_um_pi(pi_tabela, start, feriados_set)
     schedule_atualizado = schedule + novo_pi
     salvar_yaml(ARQ_SCHEDULE, schedule_atualizado)
@@ -339,7 +319,7 @@ def main() -> None:
     if ult_data:
         print(f"   Fim do PI anterior era {ult_data.isoformat()} | "
               f"Geração permitida após {(ult_data + timedelta(days=5)).isoformat()} | "
-              f"Hoje: {hoje_sao_paulo().isoformat()}")
+              f"Hoje: {hoje.iso_paulo().isoformat()}")
 
 
 if __name__ == "__main__":

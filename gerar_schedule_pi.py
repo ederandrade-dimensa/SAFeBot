@@ -200,19 +200,45 @@ def carregar_pi_tabela(caminho: Path) -> List[Dict[str, Any]]:
 
 # ----------------- Lógica de negócio ------------------------
 def escolher_data_inicio(ult_data: Optional[date], env_str: Optional[str], feriados_set: Set[date]) -> date:
+    """
+    Define a data de início considerando:
+    - Se houver schedule existente, começa no próximo dia útil após a última data,
+      a menos que a PLANNING_INTERVAL_START_DATE (ajustada) seja posterior à última data.
+    - Se NÃO houver schedule, começa na PLANNING_INTERVAL_START_DATE (obrigatória),
+      mas com a seguinte regra adicional:
+        * Se PLANNING_INTERVAL_START_DATE > hoje (America/Sao_Paulo), considerar 'hoje'.
+      Em ambos os casos, a data escolhida é ajustada ao próximo dia útil.
+    """
+    # Hoje em America/Sao_Paulo
+    hoje = hoje_sao_paulo()
+
+    def _env_dt_ajustada() -> date:
+        if not env_str:
+            raise RuntimeError(
+                f"Variável de ambiente {ENV_START} é obrigatória quando o schedule ainda não existe."
+            )
+        # Converte a env var
+        dt_env = parse_data(env_str)
+        # Regra nova: se a env var estiver no futuro, considerar 'hoje'
+        if dt_env > hoje:
+            dt_env = hoje
+        # Ajusta para próximo dia útil
+        return proximo_dia_util(dt_env, feriados_set)
+
     if ult_data is not None:
+        # Ponto de partida padrão: dia útil seguinte à última data do schedule
         start = proximo_dia_util(ult_data + timedelta(days=1), feriados_set)
+
         if env_str:
-            env_dt = proximo_dia_util(parse_data(env_str), feriados_set)
+            env_dt = _env_dt_ajustada()
+            # Mantém a semântica original: só usa a env var se for posterior à última data do schedule
             if env_dt > ult_data:
                 start = env_dt
         return start
 
-    if not env_str:
-        raise RuntimeError(
-            f"Variável de ambiente {ENV_START} é obrigatória quando o schedule ainda não existe."
-        )
-    return proximo_dia_util(parse_data(env_str), feriados_set)
+    # Não há schedule ainda: env var é obrigatória e passa pela regra nova
+    return _env_dt_ajustada()
+
 
 def montar_descricao(item: Dict[str, Any]) -> str:
     partes = []

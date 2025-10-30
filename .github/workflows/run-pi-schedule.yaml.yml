@@ -11,7 +11,6 @@ on:
         required: false
         default: "2025-11-03"
 
-# Permissões para commit e para publicar no GitHub Pages via Actions
 permissions:
   contents: write
   pages: write
@@ -27,6 +26,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           persist-credentials: true
+          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -47,13 +47,29 @@ jobs:
           echo "Arquivos após execução:"
           ls -lah
 
+      - name: Diagnóstico git (status e diff)
+        run: |
+          echo "--- git status (porcelain) ---"
+          git status --porcelain
+          echo "--- diff indexado (cached) vs worktree, se houver ---"
+          git add -N planing-interval-schedule.yaml 2>/dev/null || true
+          git diff --cached -- planing-interval-schedule.yaml || true
+          echo "--- diff HEAD vs worktree (se existir HEAD) ---"
+          git rev-parse --verify HEAD >/dev/null 2>&1 && git diff -- planing-interval-schedule.yaml || true
+
       - name: Detectar alterações nos YAMLs
         id: detect_changes
         run: |
           set -e
+          # Garantir que arquivos não rastreados apareçam no diff
+          git add -N planing-interval-schedule.yaml 2>/dev/null || true
           CHANGED="false"
-          if ! git diff --quiet -- planing-interval-schedule.yaml 2>/dev/null; then CHANGED="true"; fi
+          # Verifica alterações no índice (inclui intent-to-add) vs worktree
+          if ! git diff --quiet --cached -- planing-interval-schedule.yaml 2>/dev/null; then
+            CHANGED="true"
+          fi
           echo "changed=$CHANGED" >> "$GITHUB_OUTPUT"
+          echo "Detectado changed=$CHANGED"
 
       - name: Commit & Push se houver alterações
         if: steps.detect_changes.outputs.changed == 'true'
@@ -70,7 +86,6 @@ jobs:
         run: |
           set -e
           mkdir -p site
-          # Se quiser publicar de outras pastas, ajuste os caminhos abaixo
           cp planing-interval.yaml site/ || true
           cp planing-interval-schedule.yaml site/ || true
           ls -lah site

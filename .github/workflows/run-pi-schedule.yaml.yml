@@ -51,21 +51,22 @@ jobs:
         run: |
           echo "--- git status (porcelain) ---"
           git status --porcelain
-          echo "--- diff indexado (cached) vs worktree, se houver ---"
+          echo "--- preparar intent-to-add para o arquivo novo ---"
           git add -N planing-interval-schedule.yaml 2>/dev/null || true
-          git diff --cached -- planing-interval-schedule.yaml || true
-          echo "--- diff HEAD vs worktree (se existir HEAD) ---"
+          echo "--- diff worktree vs índice (correto p/ intent-to-add) ---"
+          git diff -- planing-interval-schedule.yaml || true
+          echo "--- diff HEAD vs worktree (apenas informativo) ---"
           git rev-parse --verify HEAD >/dev/null 2>&1 && git diff -- planing-interval-schedule.yaml || true
 
       - name: Detectar alterações nos YAMLs
         id: detect_changes
         run: |
           set -e
-          # Garantir que arquivos não rastreados apareçam no diff
+          # Garante que arquivo não rastreado entre no diff (intent-to-add)
           git add -N planing-interval-schedule.yaml 2>/dev/null || true
           CHANGED="false"
-          # Verifica alterações no índice (inclui intent-to-add) vs worktree
-          if ! git diff --quiet --cached -- planing-interval-schedule.yaml 2>/dev/null; then
+          # IMPORTANTE: comparar worktree vs índice (sem --cached)
+          if ! git diff --quiet -- planing-interval-schedule.yaml 2>/dev/null; then
             CHANGED="true"
           fi
           echo "changed=$CHANGED" >> "$GITHUB_OUTPUT"
@@ -77,12 +78,16 @@ jobs:
           set -e
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Adicione aqui todos os arquivos que quer versionar:
           git add planing-interval-schedule.yaml
+          # Se quiser versionar também o modelo base, descomente a linha abaixo:
+          # git add planing-interval.yaml
           git commit -m "chore(schedule): atualização automática do planning-interval-schedule.yaml [skip ci]"
+          # Evita erro de non-fast-forward em execuções concorrentes
+          git pull --rebase
           git push
 
       - name: Preparar conteúdo estático para Pages
-        # Publicamos SEMPRE os dois arquivos (mesmo que não tenham mudado)
         run: |
           set -e
           mkdir -p site

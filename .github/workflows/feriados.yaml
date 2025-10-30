@@ -1,0 +1,75 @@
+name: Atualizar feriados (SP)
+
+on:
+  # Executa 1x por ano – 03:00 UTC no dia 1º de janeiro
+  # (UTC!=Brasil; 03:00 UTC ≈ 00:00-01:00 no BR, dependendo do horário de verão internacional)
+  schedule:
+    - cron: "0 3 1 1 *"
+  # Disparo manual com parâmetros
+  workflow_dispatch:
+    inputs:
+      ICS_URL:
+        description: "URL do ICS"
+        required: false
+        default: "https://www.officeholidays.com/ics-clean/brazil/sao-paulo"
+      OUTPUT_YAML:
+        description: "Arquivo YAML de saída"
+        required: false
+        default: "feriados.yaml"
+      YEAR:
+        description: "Ano civil (ex.: 2026). Se definido, ignora MONTHS_AHEAD."
+        required: false
+      MONTHS_AHEAD:
+        description: "Meses a partir de hoje (se YEAR/START/END não forem usados)"
+        required: false
+        default: "12"
+      START_DATE:
+        description: "Data inicial fixa (YYYY-MM-DD). Se usada, requer END_DATE."
+        required: false
+      END_DATE:
+        description: "Data final fixa (YYYY-MM-DD, exclusivo)."
+        required: false
+
+permissions:
+  contents: write  # necessário para comitar/push
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Mantém credenciais para poder dar push com GITHUB_TOKEN
+          persist-credentials: true
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Rodar script (gerar/atualizar feriados.yaml)
+        env:
+          ICS_URL: ${{ github.event.inputs.ICS_URL || 'https://www.officeholidays.com/ics-clean/brazil/sao-paulo' }}
+          OUTPUT_YAML: ${{ github.event.inputs.OUTPUT_YAML || 'feriados.yaml' }}
+          YEAR: ${{ github.event.inputs.YEAR }}
+          MONTHS_AHEAD: ${{ github.event.inputs.MONTHS_AHEAD || '12' }}
+          START_DATE: ${{ github.event.inputs.START_DATE }}
+          END_DATE: ${{ github.event.inputs.END_DATE }}
+        run: |
+          python calendar-updater.py
+          echo "Conteúdo gerado/atualizado:"
+          ls -lah
+
+      - name: Commit & Push se houver alterações
+        run: |
+          set -e
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "chore(feriados): atualizar ${OUTPUT_YAML:-feriados.yaml} [skip ci]"
+            git push
+          else
+            echo "Nenhuma alteração para comitar."
+          fi

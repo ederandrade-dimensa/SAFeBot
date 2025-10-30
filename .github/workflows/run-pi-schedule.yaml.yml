@@ -11,12 +11,17 @@ on:
         required: false
         default: "2025-11-03"
 
+# Permissões para commit e para publicar no GitHub Pages via Actions
 permissions:
-  contents: write  # necessário para comitar/push
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
   gerar-schedule:
     runs-on: ubuntu-latest
+    outputs:
+      schedule_changed: ${{ steps.detect_changes.outputs.changed }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -39,18 +44,52 @@ jobs:
         run: |
           echo "Executando gerar_schedule_pi.py..."
           python gerar_schedule_pi.py
-          echo "Listando arquivos após execução:"
+          echo "Arquivos após execução:"
           ls -lah
 
-      - name: Commit & Push se houver alterações
+      - name: Detectar alterações nos YAMLs
+        id: detect_changes
         run: |
           set -e
-          if [ -n "$(git status --porcelain)" ]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add -A
-            git commit -m "chore(schedule): atualização automática do planning-interval-schedule.yaml [skip ci]"
-            git push
-          else
-            echo "Nenhuma alteração para comitar."
-          fi
+          CHANGED="false"
+          if ! git diff --quiet -- planing-interval-schedule.yaml 2>/dev/null; then CHANGED="true"; fi
+          echo "changed=$CHANGED" >> "$GITHUB_OUTPUT"
+
+      - name: Commit & Push se houver alterações
+        if: steps.detect_changes.outputs.changed == 'true'
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add planing-interval-schedule.yaml
+          git commit -m "chore(schedule): atualização automática do planning-interval-schedule.yaml [skip ci]"
+          git push
+
+      - name: Preparar conteúdo estático para Pages
+        # Publicamos SEMPRE os dois arquivos (mesmo que não tenham mudado)
+        run: |
+          set -e
+          mkdir -p site
+          # Se quiser publicar de outras pastas, ajuste os caminhos abaixo
+          cp planing-interval.yaml site/ || true
+          cp planing-interval-schedule.yaml site/ || true
+          ls -lah site
+
+      - name: Configurar Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact para Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: gerar-schedule
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar no GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

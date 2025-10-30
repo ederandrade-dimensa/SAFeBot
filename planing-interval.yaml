@@ -1,25 +1,25 @@
 translations:
   fase:
     planejamento_refinamento: "Planejamento e Refinamento da Sprint"
-    construcao: "ConstruÃ§Ã£o ContÃ­nua"
+    construcao: "Construção Contínua"
     checkpoint: "Checkpoint"
-    construcao_continuacao: "ContinuaÃ§Ã£o da ConstruÃ§Ã£o"
-    refactoring_estabilizacao: "Refactoring + Testes + EstabilizaÃ§Ã£o + Panic Key + Time to Learning"
-    fechamento_retro: "Fechamento e RetrÃ´"
+    construcao_continuacao: "Continuação da Construção"
+    refactoring_estabilizacao: "Refactoring + Testes + Estabilização + Panic Key + Time to Learning"
+    fechamento_retro: "Fechamento e Retrô"
   atividades:
-    planejamento_pi_desdobramento: "PriorizaÃ§Ã£o (desdobramento PI planning) + Planning + Indicadores"
-    planejamento_basico: "PriorizaÃ§Ã£o + Planning + Indicadores"
-    analise_construcao: "AnÃ¡lise + ConstruÃ§Ã£o (feature + testes)"
-    checkpoint_verificacao: "VerificaÃ§Ã£o de % concluÃ­do, riscos e impedimentos"
-    feature_testes: "Feature + Testes unitÃ¡rios e integrados"
-    consolidacao_estudos: "ConsolidaÃ§Ã£o de testes + Estudos tÃ©cnicos"
+    planejamento_pi_desdobramento: "Priorização (desdobramento PI planning) + Planning + Indicadores (BCP, throughput, etc)"
+    planejamento_basico: "Priorização + Planning + Indicadores"
+    analise_construcao: "Análise + Construção (feature + testes)"
+    checkpoint_verificacao: "Verificação de % concluído, riscos e impedimentos"
+    feature_testes: "Feature + Testes unitários e integrados"
+    consolidacao_estudos: "Consolidação de testes + Estudos técnicos"
     changelog_review_ssc: "Changelog, Review e Start/Stop/Continue"
   observacoes:
     itens_novos_buffer15_urgentes: "Itens novos entram no ciclo seguinte. Planejamento do Buffer de 15% para atendimentos urgentes"
     desenvolvimento_incremental: "Desenvolvimento incremental"
     ajustes_replanejamento: "Ajustes e replanejamento"
-    entregas_continuas: "Entregas contÃ­nuas permitidas"
-    estudo_manha_50: "50% do time em estudo pela manhÃ£"
+    entregas_continuas: "Entregas contínuas permitidas"
+    estudo_manha_50: "50% do time em estudo pela manhã"
     marco_release: "Marco oficial de release"
     itens_novos_buffer15: "Itens novos entram no ciclo seguinte. Planejamento do Buffer 15%"
   eventos_pi:
@@ -28,7 +28,7 @@ translations:
     asc_quinzenal: "ASC (quinzenal)"
     checkpoint_meio_pi: "Checkpoint de Meio PI"
     review_tech_day_1: "Review Final do PI + Tech Day (Dia 1/2)"
-    review_tech_day_2_encerramento: "Review Final do PI + Tech Day (Dia 2/2) Â· Encerramento do PI Â· Sprint 0 (preparaÃ§Ã£o para o prÃ³ximo PI)"
+    review_tech_day_2_encerramento: "Review Final do PI + Tech Day (Dia 2/2) · Encerramento do PI · Sprint 0 (preparação para o próximo PI)"
 
 planning_interval:
   sprints: 5

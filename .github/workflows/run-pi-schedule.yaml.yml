@@ -1,4 +1,4 @@
-name: Atualizar Planning Interval Schedule
+name: Atualizar Planning Interval + Publicar no Pages
 
 on:
   # Executa 1x por dia – 03:00 UTC (≈00:00 em Brasília)
@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       START_DATE:
-        description: "Data inicial (YYYY-MM-DD) – usada apenas se o arquivo ainda não existir"
+        description: "Data inicial (YYYY-MM-DD) – usada apenas se o schedule ainda não existir"
         required: false
         default: "2025-11-03"
 
@@ -16,6 +16,10 @@ permissions:
   contents: write
   pages: write
   id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   gerar-schedule:
@@ -40,6 +44,7 @@ jobs:
 
       - name: Executar script (gerar/atualizar planning-interval-schedule.yaml)
         env:
+          # Usado somente quando ainda não existe schedule
           PLANNING_INTERVAL_START_DATE: ${{ github.event.inputs.START_DATE || '2025-11-03' }}
         run: |
           echo "Executando gerar_schedule_pi.py..."
@@ -47,7 +52,7 @@ jobs:
           echo "Arquivos após execução:"
           ls -lah
 
-      - name: Detectar alterações nos YAMLs
+      - name: Detectar alterações no schedule
         id: detect_changes
         run: |
           set -e
@@ -65,14 +70,49 @@ jobs:
           git commit -m "chore(schedule): atualização automática do planning-interval-schedule.yaml [skip ci]"
           git push
 
-      - name: Preparar conteúdo estático para Pages
-        # Publicamos SEMPRE os dois arquivos (mesmo que não tenham mudado)
+      - name: Preparar conteúdo para Pages (YAML + JSON + HTML)
         run: |
           set -e
           mkdir -p site
-          # Se quiser publicar de outras pastas, ajuste os caminhos abaixo
+          # Copia YAMLs (podem ter acentuação errada na visualização direta do browser)
           cp planing-interval.yaml site/ || true
           cp planing-interval-schedule.yaml site/ || true
+          cp feriados.yaml site/ || true
+          # Gera espelhos JSON (UTF-8) para consumo confiável
+          python - << 'PY'
+          import yaml, json, pathlib
+          def dump_json(src, dst):
+              try:
+                  data = yaml.safe_load(open(src, 'r', encoding='utf-8'))
+              except FileNotFoundError:
+                  return
+              with open(dst, 'w', encoding='utf-8') as f:
+                  json.dump(data, f, ensure_ascii=False, indent=2)
+          pathlib.Path('site').mkdir(exist_ok=True)
+          dump_json('planing-interval.yaml', 'site/planing-interval.json')
+          dump_json('planing-interval-schedule.yaml', 'site/planing-interval-schedule.json')
+          dump_json('feriados.yaml', 'site/feriados.json')
+          PY
+          # Página índice com charset correto
+          cat > site/index.html << 'HTML'
+          <!doctype html><html lang="pt-br"><head>
+            <meta charset="utf-8">
+            <title>Publicação SAFe</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <style>body{font:14px system-ui,Segoe UI,Roboto,Arial;padding:24px;line-height:1.4} code{background:#f2f2f2;padding:2px 4px;border-radius:4px}</style>
+          </head><body>
+            <h1>Arquivos publicados</h1>
+            <p>Prefira os <strong>.json</strong> para consumo por aplicações (charset garantido).</p>
+            <ul>
+              <li><a href="./planing-interval-schedule.json">planing-interval-schedule.json</a></li>
+              <li><a href="./planing-interval.json">planing-interval.json</a></li>
+              <li><a href="./feriados.json">feriados.json</a></li>
+              <li><a href="./planing-interval-schedule.yaml">planing-interval-schedule.yaml</a> (pode exibir acentos incorretos no browser)</li>
+              <li><a href="./planing-interval.yaml">planing-interval.yaml</a> (pode exibir acentos incorretos no browser)</li>
+              <li><a href="./feriados.yaml">feriados.yaml</a> (pode exibir acentos incorretos no browser)</li>
+            </ul>
+          </body></html>
+          HTML
           ls -lah site
 
       - name: Configurar Pages

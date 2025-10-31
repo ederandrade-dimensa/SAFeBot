@@ -317,9 +317,12 @@ def main() -> None:
     print(f"   Novo PI inserido: {len(novo_pi)} dias úteis "
           f"(de {novo_pi[0]['date']} a {novo_pi[-1]['date']})")
     if ult_data:
-        print(f"   Fim do PI anterior era {ult_data.isoformat()} | "
-              f"Geração permitida após {(ult_data + timedelta(days=5)).isoformat()} | "
-              f"Hoje: {hoje.iso_paulo().isoformat()}")
+        print(
+            f"   Fim do PI anterior era {ult_data.isoformat()} | "
+            f"Geração permitida após {(ult_data + timedelta(days=5)).isoformat()} | "
+            f"Hoje: {hoje.isoformat()}"
+        )
+
 
 
 if __name__ == "__main__":

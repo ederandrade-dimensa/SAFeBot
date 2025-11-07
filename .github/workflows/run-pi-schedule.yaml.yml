@@ -40,9 +40,13 @@ jobs:
 
       - name: Executar script (gerar/atualizar planning-interval-schedule.yaml)
         env:
+          # Variáveis de ambiente lidas pelo script
           PLANNING_INTERVAL_START_DATE: ${{ github.event.inputs.START_DATE || '2025-11-03' }}
+          # <<< NOVO: variável global vinda de repo/env secrets
+          SKIP_EMENDAS: ${{ vars.SKIP_EMENDAS || 'true' }}
         run: |
           echo "Executando gerar_schedule_pi.py..."
+          echo "SKIP_EMENDAS=$SKIP_EMENDAS"
           python gerar_schedule_pi.py
           echo "Arquivos após execução:"
           ls -lah
@@ -62,10 +66,8 @@ jobs:
         id: detect_changes
         run: |
           set -e
-          # Garante que arquivo não rastreado entre no diff (intent-to-add)
           git add -N planing-interval-schedule.yaml 2>/dev/null || true
           CHANGED="false"
-          # IMPORTANTE: comparar worktree vs índice (sem --cached)
           if ! git diff --quiet -- planing-interval-schedule.yaml 2>/dev/null; then
             CHANGED="true"
           fi
@@ -78,12 +80,8 @@ jobs:
           set -e
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          # Adicione aqui todos os arquivos que quer versionar:
           git add planing-interval-schedule.yaml
-          # Se quiser versionar também o modelo base, descomente a linha abaixo:
-          # git add planing-interval.yaml
           git commit -m "chore(schedule): atualização automática do planning-interval-schedule.yaml [skip ci]"
-          # Evita erro de non-fast-forward em execuções concorrentes
           git pull --rebase
           git push
 

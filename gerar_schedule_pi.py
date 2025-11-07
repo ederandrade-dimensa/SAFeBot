@@ -33,6 +33,7 @@ ARQ_SCHEDULE = Path(os.environ.get("PLANING_INTERVAL_SCHEDULE_FILE", "planing-in
 
 ARQ_SKIP     = Path("skip-dates.txt")
 ENV_START    = "PLANNING_INTERVAL_START_DATE"  # ainda suportado se não existir schedule
+ENV_SKIP_EMENDAS = os.environ.get("SKIP_EMENDAS", "").strip().lower() in {"1", "true", "on", "yes", "y"}
 # ------------------------------------------------------------
 
 # ----------------- Utilidades de data -----------------------
@@ -226,6 +227,28 @@ def gerar_um_pi(pi_tabela: List[Dict[str, Any]], start: date, feriados_set: Set[
         saida.append(registro)
         data_corrente += timedelta(days=1)
     return saida
+
+# ----------------- Utilidades / helpers NOVOS -----------------
+def calcular_emendas(feriados: Set[date]) -> Set[date]:
+    """
+    Regras:
+      - Se o feriado cai na terça (weekday == 1), pula a segunda (d - 1).
+      - Se o feriado cai na quinta (weekday == 3), pula a sexta (d + 1).
+    Observações:
+      - Só adiciona se esses dias forem dias de semana.
+      - Não duplica se já for feriado.
+    """
+    emendas: Set[date] = set()
+    for d in feriados:
+        if d.weekday() == 1:  # terça
+            segunda = d - timedelta(days=1)
+            if 0 <= segunda.weekday() <= 4 and segunda not in feriados:
+                emendas.add(segunda)
+        elif d.weekday() == 3:  # quinta
+            sexta = d + timedelta(days=1)
+            if 0 <= sexta.weekday() <= 4 and sexta not in feriados:
+                emendas.add(sexta)
+    return emendas
 # ------------------------------------------------------------
 
 def main() -> None:
@@ -241,9 +264,19 @@ def main() -> None:
     mapa_feriados = carregar_feriados(ARQ_FERIADOS)
     feriados_set = set(mapa_feriados.keys())
     skip_set = carregar_skip_dates(ARQ_SKIP)
+
+    emendas_set: Set[date] = set()
+    if ENV_SKIP_EMENDAS:
+        emendas_set = calcular_emendas(feriados_set)
+        if emendas_set:
+            print(f"Emendas habilitadas: {len(emendas_set)} dia(s) incluído(s) como skip devido a feriados em 3ª/5ª.")
+            # dica opcional: se quiser ver quais são, descomente a linha abaixo
+            # print('  ' + ', '.join(sorted(d.isoformat() for d in emendas_set)))
+
     if skip_set:
         print(f"Skip dates: {len(skip_set)} data(s) será(ão) pulada(s) ({ARQ_SKIP}).")
-    feriados_ou_skips = feriados_set | skip_set
+
+    feriados_ou_skips = feriados_set | emendas_set | skip_set
 
     # --- tabela do PI ---
     try:

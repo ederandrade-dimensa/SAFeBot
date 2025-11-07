@@ -48,7 +48,12 @@ ARQ_FERIADOS = Path(os.environ.get("FERIADOS_FILE", "feriados.yaml"))
 ARQ_PI       = Path(os.environ.get("PLANING_INTERVAL_FILE", "planing-interval.yaml"))
 ARQ_SCHEDULE = Path(os.environ.get("PLANING_INTERVAL_SCHEDULE_FILE", "planing-interval-schedule.yaml"))
 
+# NOVO: arquivo de datas a serem puladas (fixo pelo requisito)
+ARQ_SKIP     = Path("skip-dates.txt")
+
 ENV_START = "PLANNING_INTERVAL_START_DATE"  # valor ISO: YYYY-MM-DD
+# ------------------------------------------------------------
+
 # ------------------------------------------------------------
 
 # ----------------- Utilidades de data -----------------------
@@ -95,6 +100,22 @@ def carregar_feriados(caminho: Path) -> Dict[date, str]:
         nome = item.get("nome", "")
         feriados[d] = nome
     return feriados
+
+def carregar_skip_dates(caminho: Path) -> Set[date]:
+    datas: Set[date] = set()
+    if not caminho.exists():
+        return datas
+    with caminho.open("r", encoding="utf-8") as f:
+        for i, linha in enumerate(f, 1):
+            s = linha.strip()
+            if not s or s.startswith("#"):
+                continue
+            try:
+                datas.add(date.fromisoformat(s))
+            except Exception:
+                print(f"⚠️ Linha {i} de {caminho} ignorada (esperado ISO YYYY-MM-DD): {s!r}", file=sys.stderr)
+    return datas
+
 
 def carregar_schedule(caminho: Path) -> List[Dict[str, Any]]:
     if not caminho.exists():
@@ -258,6 +279,12 @@ def main() -> None:
     mapa_feriados = carregar_feriados(ARQ_FERIADOS)
     feriados_set = set(mapa_feriados.keys())
 
+    # NOVO: carrega datas a serem puladas e compõe conjunto único para “dia útil”
+    skip_set = carregar_skip_dates(ARQ_SKIP)
+    if skip_set:
+        print(f"Skip dates: {len(skip_set)} data(s) será(ão) pulada(s) (arquivo {ARQ_SKIP}).")
+    feriados_ou_skips = feriados_set | skip_set
+
     if not ARQ_PI.exists():
         print(f"ERRO: não encontrei {ARQ_PI}", file=sys.stderr)
         sys.exit(1)
@@ -278,7 +305,8 @@ def main() -> None:
     env_dt_util: Optional[date] = None
     if env_str:
         try:
-            env_dt_util = proximo_dia_util(parse_data(env_str), feriados_set)
+            # ALTERADO: usar feriados_ou_skips
+            env_dt_util = proximo_dia_util(parse_data(env_str), feriados_ou_skips)
         except Exception as e:
             print("ERRO ao interpretar PLANNING_INTERVAL_START_DATE:\n" + str(e), file=sys.stderr)
             sys.exit(1)
@@ -302,14 +330,16 @@ def main() -> None:
 
     ult_data = ultima_data_no_schedule(schedule)
     try:
-        start = escolher_data_inicio(ult_data, env_str, feriados_set)
+        # ALTERADO: usar feriados_ou_skips
+        start = escolher_data_inicio(ult_data, env_str, feriados_ou_skips)
         if ignorar_janela and env_dt_util is not None:
             start = env_dt_util
     except Exception as e:
         print("ERRO ao determinar data inicial:\n" + str(e), file=sys.stderr)
         sys.exit(1)
 
-    novo_pi = gerar_um_pi(pi_tabela, start, feriados_set)
+    # ALTERADO: usar feriados_ou_skips
+    novo_pi = gerar_um_pi(pi_tabela, start, feriados_ou_skips)
     schedule_atualizado = schedule + novo_pi
     salvar_yaml(ARQ_SCHEDULE, schedule_atualizado)
 
@@ -322,6 +352,7 @@ def main() -> None:
             f"Geração permitida após {(ult_data + timedelta(days=5)).isoformat()} | "
             f"Hoje: {hoje.isoformat()}"
         )
+
 
 
 

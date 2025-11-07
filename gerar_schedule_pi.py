@@ -216,17 +216,24 @@ def gerar_um_pi(pi_tabela: List[Dict[str, Any]], start: date, feriados_set: Set[
     for item in tabela:
         if not eh_dia_util(data_corrente, feriados_set):
             data_corrente = proximo_dia_util(data_corrente, feriados_set)
+
         registro = {
             "date": data_corrente.isoformat(),
             "pi_day": int(item.get("dia")),
             "sprint": int(item.get("sprint")),
             "day_in_sprint": int(item.get("dia_sprint")),
             "descricao": montar_descricao(item),
-            "meta": {k: v for k, v in item.items() if k not in {"dia", "sprint", "dia_sprint"}}
+            # mantém os extras em meta, mas sem duplicar 'cor'
+            "meta": {k: v for k, v in item.items() if k not in {"dia", "sprint", "dia_sprint", "cor"}},
         }
+
+        if "cor" in item and item["cor"] is not None:
+            registro["cor"] = item["cor"]
+
         saida.append(registro)
         data_corrente += timedelta(days=1)
     return saida
+
 
 # ----------------- Utilidades / helpers NOVOS -----------------
 def calcular_emendas(feriados: Set[date]) -> Set[date]:

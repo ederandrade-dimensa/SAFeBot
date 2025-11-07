@@ -42,6 +42,7 @@ planning_interval:
       atividades: "atividades.planejamento_pi_desdobramento"
       observacoes: "observacoes.itens_novos_buffer15_urgentes"
       eventos_pi: "eventos_pi.pi_planning_dia1"
+      cor: "#FFD700"
 
     - dia: 2
       sprint: 1
@@ -50,6 +51,7 @@ planning_interval:
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
       eventos_pi: "eventos_pi.pi_planning_dia2"
+      cor: "#32CD32"
 
     - dia: 3
       sprint: 1
@@ -57,6 +59,7 @@ planning_interval:
       fase: "fase.construcao"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
+      cor: "#32CD32"
 
     - dia: 4
       sprint: 1
@@ -64,6 +67,7 @@ planning_interval:
       fase: "fase.construcao"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
+      cor: "#32CD32"
 
     - dia: 5
       sprint: 1
@@ -71,6 +75,7 @@ planning_interval:
       fase: "fase.checkpoint"
       atividades: "atividades.checkpoint_verificacao"
       observacoes: "observacoes.ajustes_replanejamento"
+      cor: "#1E90FF"
 
     - dia: 6
       sprint: 1
@@ -78,6 +83,7 @@ planning_interval:
       fase: "fase.construcao_continuacao"
       atividades: "atividades.feature_testes"
       observacoes: "observacoes.entregas_continuas"
+      cor: "#32CD32"
 
     - dia: 7
       sprint: 1
@@ -85,6 +91,7 @@ planning_interval:
       fase: "fase.construcao_continuacao"
       atividades: "atividades.feature_testes"
       observacoes: "observacoes.entregas_continuas"
+      cor: "#32CD32"
 
     - dia: 8
       sprint: 1
@@ -92,6 +99,7 @@ planning_interval:
       fase: "fase.refactoring_estabilizacao"
       atividades: "atividades.consolidacao_estudos"
       observacoes: "observacoes.estudo_manha_50"
+      cor: "#FF0000"
 
     - dia: 9
       sprint: 1
@@ -99,6 +107,7 @@ planning_interval:
       fase: "fase.refactoring_estabilizacao"
       atividades: "atividades.consolidacao_estudos"
       observacoes: "observacoes.estudo_manha_50"
+      cor: "#FF0000"
 
     - dia: 10
       sprint: 1
@@ -106,6 +115,7 @@ planning_interval:
       fase: "fase.fechamento_retro"
       atividades: "atividades.changelog_review_ssc"
       observacoes: "observacoes.marco_release"
+      cor: "#FFA500"
 
     - dia: 11
       sprint: 2
@@ -113,6 +123,7 @@ planning_interval:
       fase: "fase.planejamento_refinamento"
       atividades: "atividades.planejamento_basico"
       observacoes: "observacoes.itens_novos_buffer15"
+      cor: "#FFD700"
 
     - dia: 12
       sprint: 2
@@ -120,6 +131,7 @@ planning_interval:
       fase: "fase.construcao"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
+      cor: "#32CD32"
 
     - dia: 13
       sprint: 2
@@ -127,6 +139,7 @@ planning_interval:
       fase: "fase.construcao"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
+      cor: "#32CD32"
 
     - dia: 14
       sprint: 2
@@ -134,6 +147,7 @@ planning_interval:
       fase: "fase.construcao"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
+      cor: "#32CD32"
 
     - dia: 15
       sprint: 2
@@ -141,6 +155,7 @@ planning_interval:
       fase: "fase.checkpoint"
       atividades: "atividades.checkpoint_verificacao"
       observacoes: "observacoes.ajustes_replanejamento"
+      cor: "#1E90FF"
 
     - dia: 16
       sprint: 2
@@ -149,6 +164,7 @@ planning_interval:
       atividades: "atividades.feature_testes"
       observacoes: "observacoes.entregas_continuas"
       eventos_pi: "eventos_pi.asc_quinzenal"
+      cor: "#32CD32"
 
     - dia: 17
       sprint: 2
@@ -156,6 +172,7 @@ planning_interval:
       fase: "fase.construcao_continuacao"
       atividades: "atividades.feature_testes"
       observacoes: "observacoes.entregas_continuas"
+      cor: "#32CD32"
 
     - dia: 18
       sprint: 2
@@ -163,6 +180,7 @@ planning_interval:
       fase: "fase.refactoring_estabilizacao"
       atividades: "atividades.consolidacao_estudos"
       observacoes: "observacoes.estudo_manha_50"
+      cor: "#FF0000"
 
     - dia: 19
       sprint: 2
@@ -170,6 +188,7 @@ planning_interval:
       fase: "fase.refactoring_estabilizacao"
       atividades: "atividades.consolidacao_estudos"
       observacoes: "observacoes.estudo_manha_50"
+      cor: "#FF0000"
 
     - dia: 20
       sprint: 2
@@ -177,6 +196,7 @@ planning_interval:
       fase: "fase.fechamento_retro"
       atividades: "atividades.changelog_review_ssc"
       observacoes: "observacoes.marco_release"
+      cor: "#FFA500"
 
     - dia: 21
       sprint: 3
@@ -184,6 +204,7 @@ planning_interval:
       fase: "fase.planejamento_refinamento"
       atividades: "atividades.planejamento_basico"
       observacoes: "observacoes.itens_novos_buffer15"
+      cor: "#FFD700"
 
     - dia: 22
       sprint: 3
@@ -191,6 +212,7 @@ planning_interval:
       fase: "fase.construcao"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
+      cor: "#32CD32"
 
     - dia: 23
       sprint: 3
@@ -198,6 +220,7 @@ planning_interval:
       fase: "fase.construcao"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
+      cor: "#32CD32"
 
     - dia: 24
       sprint: 3
@@ -205,6 +228,7 @@ planning_interval:
       fase: "fase.construcao"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
+      cor: "#32CD32"
 
     - dia: 25
       sprint: 3
@@ -213,6 +237,7 @@ planning_interval:
       atividades: "atividades.checkpoint_verificacao"
       observacoes: "observacoes.ajustes_replanejamento"
       eventos_pi: "eventos_pi.checkpoint_meio_pi"
+      cor: "#1E90FF"
 
     - dia: 26
       sprint: 3
@@ -220,6 +245,7 @@ planning_interval:
       fase: "fase.construcao_continuacao"
       atividades: "atividades.feature_testes"
       observacoes: "observacoes.entregas_continuas"
+      cor: "#32CD32"
 
     - dia: 27
       sprint: 3
@@ -227,6 +253,7 @@ planning_interval:
       fase: "fase.construcao_continuacao"
       atividades: "atividades.feature_testes"
       observacoes: "observacoes.entregas_continuas"
+      cor: "#32CD32"
 
     - dia: 28
       sprint: 3
@@ -234,6 +261,7 @@ planning_interval:
       fase: "fase.refactoring_estabilizacao"
       atividades: "atividades.consolidacao_estudos"
       observacoes: "observacoes.estudo_manha_50"
+      cor: "#FF0000"
 
     - dia: 29
       sprint: 3
@@ -241,6 +269,7 @@ planning_interval:
       fase: "fase.refactoring_estabilizacao"
       atividades: "atividades.consolidacao_estudos"
       observacoes: "observacoes.estudo_manha_50"
+      cor: "#FF0000"
 
     - dia: 30
       sprint: 3
@@ -248,6 +277,7 @@ planning_interval:
       fase: "fase.fechamento_retro"
       atividades: "atividades.changelog_review_ssc"
       observacoes: "observacoes.marco_release"
+      cor: "#FFA500"
 
     - dia: 31
       sprint: 4
@@ -255,6 +285,7 @@ planning_interval:
       fase: "fase.planejamento_refinamento"
       atividades: "atividades.planejamento_basico"
       observacoes: "observacoes.itens_novos_buffer15"
+      cor: "#FFD700"
 
     - dia: 32
       sprint: 4
@@ -262,6 +293,7 @@ planning_interval:
       fase: "fase.construcao"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
+      cor: "#32CD32"
 
     - dia: 33
       sprint: 4
@@ -269,6 +301,7 @@ planning_interval:
       fase: "fase.construcao"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
+      cor: "#32CD32"
 
     - dia: 34
       sprint: 4
@@ -276,6 +309,7 @@ planning_interval:
       fase: "fase.construcao"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
+      cor: "#32CD32"
 
     - dia: 35
       sprint: 4
@@ -283,6 +317,7 @@ planning_interval:
       fase: "fase.checkpoint"
       atividades: "atividades.checkpoint_verificacao"
       observacoes: "observacoes.ajustes_replanejamento"
+      cor: "#1E90FF"
 
     - dia: 36
       sprint: 4
@@ -291,6 +326,7 @@ planning_interval:
       atividades: "atividades.feature_testes"
       observacoes: "observacoes.entregas_continuas"
       eventos_pi: "eventos_pi.asc_quinzenal"
+      cor: "#32CD32"
 
     - dia: 37
       sprint: 4
@@ -298,6 +334,7 @@ planning_interval:
       fase: "fase.construcao_continuacao"
       atividades: "atividades.feature_testes"
       observacoes: "observacoes.entregas_continuas"
+      cor: "#32CD32"
 
     - dia: 38
       sprint: 4
@@ -305,6 +342,7 @@ planning_interval:
       fase: "fase.refactoring_estabilizacao"
       atividades: "atividades.consolidacao_estudos"
       observacoes: "observacoes.estudo_manha_50"
+      cor: "#FF0000"
 
     - dia: 39
       sprint: 4
@@ -312,6 +350,7 @@ planning_interval:
       fase: "fase.refactoring_estabilizacao"
       atividades: "atividades.consolidacao_estudos"
       observacoes: "observacoes.estudo_manha_50"
+      cor: "#FF0000"
 
     - dia: 40
       sprint: 4
@@ -319,6 +358,7 @@ planning_interval:
       fase: "fase.fechamento_retro"
       atividades: "atividades.changelog_review_ssc"
       observacoes: "observacoes.marco_release"
+      cor: "#FFA500"
 
     - dia: 41
       sprint: 5
@@ -326,6 +366,7 @@ planning_interval:
       fase: "fase.planejamento_refinamento"
       atividades: "atividades.planejamento_basico"
       observacoes: "observacoes.itens_novos_buffer15"
+      cor: "#FFD700"
 
     - dia: 42
       sprint: 5
@@ -333,6 +374,7 @@ planning_interval:
       fase: "fase.construcao"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
+      cor: "#32CD32"
 
     - dia: 43
       sprint: 5
@@ -340,6 +382,7 @@ planning_interval:
       fase: "fase.construcao"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
+      cor: "#32CD32"
 
     - dia: 44
       sprint: 5
@@ -347,6 +390,7 @@ planning_interval:
       fase: "fase.construcao"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
+      cor: "#32CD32"
 
     - dia: 45
       sprint: 5
@@ -354,6 +398,7 @@ planning_interval:
       fase: "fase.checkpoint"
       atividades: "atividades.checkpoint_verificacao"
       observacoes: "observacoes.ajustes_replanejamento"
+      cor: "#1E90FF"
 
     - dia: 46
       sprint: 5
@@ -361,6 +406,7 @@ planning_interval:
       fase: "fase.construcao_continuacao"
       atividades: "atividades.feature_testes"
       observacoes: "observacoes.entregas_continuas"
+      cor: "#32CD32"
 
     - dia: 47
       sprint: 5
@@ -368,6 +414,7 @@ planning_interval:
       fase: "fase.construcao_continuacao"
       atividades: "atividades.feature_testes"
       observacoes: "observacoes.entregas_continuas"
+      cor: "#32CD32"
 
     - dia: 48
       sprint: 5
@@ -375,6 +422,7 @@ planning_interval:
       fase: "fase.refactoring_estabilizacao"
       atividades: "atividades.consolidacao_estudos"
       observacoes: "observacoes.estudo_manha_50"
+      cor: "#FF0000"
 
     - dia: 49
       sprint: 5
@@ -383,6 +431,7 @@ planning_interval:
       atividades: "atividades.consolidacao_estudos"
       observacoes: "observacoes.estudo_manha_50"
       eventos_pi: "eventos_pi.review_tech_day_1"
+      cor: "#FF0000"
 
     - dia: 50
       sprint: 5
@@ -391,3 +440,4 @@ planning_interval:
       atividades: "atividades.changelog_review_ssc"
       observacoes: "observacoes.marco_release"
       eventos_pi: "eventos_pi.review_tech_day_2_encerramento"
+      cor: "#FFA500"

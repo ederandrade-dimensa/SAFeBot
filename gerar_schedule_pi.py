@@ -334,33 +334,33 @@ def main() -> None:
             print(f"👉 Janela ≤5 dias: próximo PI também gerado ({prox[0]['date']} → {prox[-1]['date']}).")
         sys.exit(0)
 
+    # --- escolha do pivot e do start do reflow ---
+    pivot = hoje
+    start = escolher_start_para_reflow(hoje, feriados_ou_skips)
+
     if schedule:
         primeira = primeira_data_no_schedule(schedule)
         if primeira and hoje < primeira:
-            # Já existe um cronograma futuro e ainda não começou: respeite-o, não reflow.
-            print(f"⏸️ Schedule futuro preservado: começa em {primeira.isoformat()}. "
-                  f"Como hoje é {hoje.isoformat()}, não recalcularei.")
-            # (Opcional) se quiser verificar janela de 5 dias do PI atual, só faça quando hoje >= primeira.
-            sys.exit(0)
+            # Schedule todo no futuro: não volte no tempo.
+            # Recalcule a partir da *primeira data já agendada* (ajustada para dia útil),
+            # para aplicar novos feriados/skips/emendas.
+            pivot = primeira
+            start = proximo_dia_util(primeira, feriados_ou_skips)
 
-    # --- REFLOW: manter passado, descartar futuro e recalcular a partir de hoje ---
-    passado, futuro = split_schedule_por_data(schedule, hoje)
-    start = escolher_start_para_reflow(hoje, feriados_ou_skips)
+    # --- REFLOW: manter passado (< pivot), descartar futuro (>= pivot) e recalcular a partir de start ---
+    passado, futuro = split_schedule_por_data(schedule, pivot)
     pi_atual = gerar_um_pi(pi_tabela, start, feriados_ou_skips)
     fim_atual = parse_data(pi_atual[-1]["date"])
 
-    # Preserva do schedule antigo apenas o que vier *depois* do fim recalculado
+    # preserva apenas o que vier *depois* do fim recalculado
     futuro_apos = []
     for item in futuro:
         d = data_do_item(item)
         if d is None:
-            # Itens sem data não sabemos posicionar no tempo: por segurança, mantenha-os no passado
-            # (ou, se preferir, acrescente-os em 'futuro_apos' – depende da sua convenção)
             continue
         if d > fim_atual:
             futuro_apos.append(item)
 
-    # Monta o schedule novo: passado + PI atual recalculado + (qualquer futuro já existente após o fim)
     schedule_atualizado = passado + pi_atual + futuro_apos
 
     # --- checar janela de 5 dias para pré-gerar próximo PI ---

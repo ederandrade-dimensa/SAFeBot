@@ -319,30 +319,51 @@ def main() -> None:
         sys.exit(0)
 
     # --- REFLOW: manter passado, descartar futuro e recalcular a partir de hoje ---
-    passado, _futuro = split_schedule_por_data(schedule, hoje)
+    passado, futuro = split_schedule_por_data(schedule, hoje)
     start = escolher_start_para_reflow(hoje, feriados_ou_skips)
     pi_atual = gerar_um_pi(pi_tabela, start, feriados_ou_skips)
-    schedule_atualizado = passado + pi_atual
+    fim_atual = parse_data(pi_atual[-1]["date"])
+
+    # Preserva do schedule antigo apenas o que vier *depois* do fim recalculado
+    futuro_apos = []
+    for item in futuro:
+        d = data_do_item(item)
+        if d is None:
+            # Itens sem data não sabemos posicionar no tempo: por segurança, mantenha-os no passado
+            # (ou, se preferir, acrescente-os em 'futuro_apos' – depende da sua convenção)
+            continue
+        if d > fim_atual:
+            futuro_apos.append(item)
+
+    # Monta o schedule novo: passado + PI atual recalculado + (qualquer futuro já existente após o fim)
+    schedule_atualizado = passado + pi_atual + futuro_apos
 
     # --- checar janela de 5 dias para pré-gerar próximo PI ---
-    fim_atual = parse_data(pi_atual[-1]["date"])
     faltam_dias = (fim_atual - hoje).days
-    if faltam_dias <= 5:
+    ja_existe_proximo = len(futuro_apos) > 0
+
+    if faltam_dias <= 5 and not ja_existe_proximo:
         prox_start = proximo_dia_util(fim_atual + timedelta(days=1), feriados_ou_skips)
         prox_pi = gerar_um_pi(pi_tabela, prox_start, feriados_ou_skips)
         schedule_atualizado += prox_pi
         print(f"⏩ A {faltam_dias} dia(s) do fim: próximo PI pré-gerado "
               f"({prox_pi[0]['date']} → {prox_pi[-1]['date']}).")
+    elif faltam_dias <= 5 and ja_existe_proximo:
+        print(f"ℹ️ A {faltam_dias} dia(s) do fim: já havia PI futuro no schedule; não gerei outro.")
 
     salvar_yaml(ARQ_SCHEDULE, schedule_atualizado)
 
     print(f"✅ Reflow aplicado. Mantidos {len(passado)} itens do passado.")
     print(f"   PI atual: {len(pi_atual)} dias úteis ({pi_atual[0]['date']} → {pi_atual[-1]['date']})")
     if faltam_dias <= 5:
-        print(f"   Próximo PI já incluído.")
+        if ja_existe_proximo:
+            print("   Próximo PI já existia e foi preservado.")
+        else:
+            print("   Próximo PI foi gerado agora.")
     else:
         print(f"   Ainda faltam {faltam_dias} dia(s) corridos para o fim do PI atual; "
               f"próximo PI será gerado automaticamente quando atingir ≤ 5.")
+
 
 if __name__ == "__main__":
     main()

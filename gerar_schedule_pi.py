@@ -258,6 +258,22 @@ def calcular_emendas(feriados: Set[date]) -> Set[date]:
     return emendas
 # ------------------------------------------------------------
 
+def primeira_data_no_schedule(schedule: List[Dict[str, Any]]) -> Optional[date]:
+    if not schedule:
+        return None
+    try:
+        return min(parse_data(item["date"]) for item in schedule if "date" in item)
+    except Exception:
+        return None
+
+def ultima_data_no_schedule(schedule: List[Dict[str, Any]]) -> Optional[date]:
+    if not schedule:
+        return None
+    try:
+        return max(parse_data(item["date"]) for item in schedule if "date" in item)
+    except Exception:
+        return None
+
 def main() -> None:
     # --- entradas obrigatórias ---
     if not ARQ_FERIADOS.exists():
@@ -317,6 +333,15 @@ def main() -> None:
             salvar_yaml(ARQ_SCHEDULE, atual + prox)
             print(f"👉 Janela ≤5 dias: próximo PI também gerado ({prox[0]['date']} → {prox[-1]['date']}).")
         sys.exit(0)
+
+    if schedule:
+        primeira = primeira_data_no_schedule(schedule)
+        if primeira and hoje < primeira:
+            # Já existe um cronograma futuro e ainda não começou: respeite-o, não reflow.
+            print(f"⏸️ Schedule futuro preservado: começa em {primeira.isoformat()}. "
+                  f"Como hoje é {hoje.isoformat()}, não recalcularei.")
+            # (Opcional) se quiser verificar janela de 5 dias do PI atual, só faça quando hoje >= primeira.
+            sys.exit(0)
 
     # --- REFLOW: manter passado, descartar futuro e recalcular a partir de hoje ---
     passado, futuro = split_schedule_por_data(schedule, hoje)

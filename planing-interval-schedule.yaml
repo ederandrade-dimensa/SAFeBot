@@ -1,4 +1,4 @@
-- date: '2025-11-25'
+- date: '2025-12-01'
   pi_day: 1
   sprint: 1
   day_in_sprint: 1
@@ -10,7 +10,7 @@
     observacoes: observacoes.itens_novos_buffer15_urgentes
     eventos_pi: eventos_pi.pi_planning_dia1
     event_color: YELLOW
-- date: '2025-11-26'
+- date: '2025-12-03'
   pi_day: 2
   sprint: 1
   day_in_sprint: 2
@@ -22,7 +22,7 @@
     observacoes: observacoes.desenvolvimento_incremental
     eventos_pi: eventos_pi.pi_planning_dia2
     event_color: GREEN
-- date: '2025-11-27'
+- date: '2025-12-04'
   pi_day: 3
   sprint: 1
   day_in_sprint: 3
@@ -32,7 +32,7 @@
     atividades: atividades.analise_construcao
     observacoes: observacoes.desenvolvimento_incremental
     event_color: GREEN
-- date: '2025-11-28'
+- date: '2025-12-05'
   pi_day: 4
   sprint: 1
   day_in_sprint: 4
@@ -42,7 +42,7 @@
     atividades: atividades.analise_construcao
     observacoes: observacoes.desenvolvimento_incremental
     event_color: GREEN
-- date: '2025-12-01'
+- date: '2025-12-08'
   pi_day: 5
   sprint: 1
   day_in_sprint: 5
@@ -52,7 +52,7 @@
     atividades: atividades.checkpoint_verificacao
     observacoes: observacoes.ajustes_replanejamento
     event_color: BLUE
-- date: '2025-12-02'
+- date: '2025-12-09'
   pi_day: 6
   sprint: 1
   day_in_sprint: 6
@@ -62,7 +62,7 @@
     atividades: atividades.feature_testes
     observacoes: observacoes.entregas_continuas
     event_color: GREEN
-- date: '2025-12-03'
+- date: '2025-12-10'
   pi_day: 7
   sprint: 1
   day_in_sprint: 7
@@ -72,7 +72,7 @@
     atividades: atividades.feature_testes
     observacoes: observacoes.entregas_continuas
     event_color: GREEN
-- date: '2025-12-04'
+- date: '2025-12-11'
   pi_day: 8
   sprint: 1
   day_in_sprint: 8
@@ -82,7 +82,7 @@
     atividades: atividades.consolidacao_estudos
     observacoes: observacoes.estudo_manha_50
     event_color: RED
-- date: '2025-12-05'
+- date: '2025-12-12'
   pi_day: 9
   sprint: 1
   day_in_sprint: 9
@@ -92,7 +92,7 @@
     atividades: atividades.consolidacao_estudos
     observacoes: observacoes.estudo_manha_50
     event_color: RED
-- date: '2025-12-08'
+- date: '2025-12-15'
   pi_day: 10
   sprint: 1
   day_in_sprint: 10
@@ -102,7 +102,7 @@
     atividades: atividades.changelog_review_ssc
     observacoes: observacoes.marco_release
     event_color: ORANGE
-- date: '2025-12-09'
+- date: '2025-12-16'
   pi_day: 11
   sprint: 2
   day_in_sprint: 1
@@ -112,7 +112,7 @@
     atividades: atividades.planejamento_basico
     observacoes: observacoes.itens_novos_buffer15
     event_color: YELLOW
-- date: '2025-12-10'
+- date: '2025-12-17'
   pi_day: 12
   sprint: 2
   day_in_sprint: 2
@@ -122,7 +122,7 @@
     atividades: atividades.analise_construcao
     observacoes: observacoes.desenvolvimento_incremental
     event_color: GREEN
-- date: '2025-12-11'
+- date: '2025-12-18'
   pi_day: 13
   sprint: 2
   day_in_sprint: 3
@@ -132,7 +132,7 @@
     atividades: atividades.analise_construcao
     observacoes: observacoes.desenvolvimento_incremental
     event_color: GREEN
-- date: '2025-12-12'
+- date: '2025-12-19'
   pi_day: 14
   sprint: 2
   day_in_sprint: 4
@@ -142,7 +142,7 @@
     atividades: atividades.analise_construcao
     observacoes: observacoes.desenvolvimento_incremental
     event_color: GREEN
-- date: '2025-12-15'
+- date: '2025-12-22'
   pi_day: 15
   sprint: 2
   day_in_sprint: 5
@@ -152,7 +152,7 @@
     atividades: atividades.checkpoint_verificacao
     observacoes: observacoes.ajustes_replanejamento
     event_color: BLUE
-- date: '2025-12-16'
+- date: '2025-12-23'
   pi_day: 16
   sprint: 2
   day_in_sprint: 6
@@ -164,7 +164,7 @@
     observacoes: observacoes.entregas_continuas
     eventos_pi: eventos_pi.asc_quinzenal
     event_color: GREEN
-- date: '2025-12-17'
+- date: '2025-12-29'
   pi_day: 17
   sprint: 2
   day_in_sprint: 7
@@ -174,7 +174,7 @@
     atividades: atividades.feature_testes
     observacoes: observacoes.entregas_continuas
     event_color: GREEN
-- date: '2025-12-18'
+- date: '2025-12-30'
   pi_day: 18
   sprint: 2
   day_in_sprint: 8
@@ -184,7 +184,7 @@
     atividades: atividades.consolidacao_estudos
     observacoes: observacoes.estudo_manha_50
     event_color: RED
-- date: '2025-12-19'
+- date: '2026-01-05'
   pi_day: 19
   sprint: 2
   day_in_sprint: 9
@@ -194,7 +194,7 @@
     atividades: atividades.consolidacao_estudos
     observacoes: observacoes.estudo_manha_50
     event_color: RED
-- date: '2025-12-22'
+- date: '2026-01-06'
   pi_day: 20
   sprint: 2
   day_in_sprint: 10
@@ -204,7 +204,7 @@
     atividades: atividades.changelog_review_ssc
     observacoes: observacoes.marco_release
     event_color: ORANGE
-- date: '2025-12-23'
+- date: '2026-01-07'
   pi_day: 21
   sprint: 3
   day_in_sprint: 1
@@ -214,7 +214,7 @@
     atividades: atividades.planejamento_basico
     observacoes: observacoes.itens_novos_buffer15
     event_color: YELLOW
-- date: '2025-12-29'
+- date: '2026-01-08'
   pi_day: 22
   sprint: 3
   day_in_sprint: 2
@@ -224,7 +224,7 @@
     atividades: atividades.analise_construcao
     observacoes: observacoes.desenvolvimento_incremental
     event_color: GREEN
-- date: '2025-12-30'
+- date: '2026-01-09'
   pi_day: 23
   sprint: 3
   day_in_sprint: 3
@@ -234,7 +234,7 @@
     atividades: atividades.analise_construcao
     observacoes: observacoes.desenvolvimento_incremental
     event_color: GREEN
-- date: '2026-01-05'
+- date: '2026-01-12'
   pi_day: 24
   sprint: 3
   day_in_sprint: 4
@@ -244,7 +244,7 @@
     atividades: atividades.analise_construcao
     observacoes: observacoes.desenvolvimento_incremental
     event_color: GREEN
-- date: '2026-01-06'
+- date: '2026-01-13'
   pi_day: 25
   sprint: 3
   day_in_sprint: 5
@@ -256,7 +256,7 @@
     observacoes: observacoes.ajustes_replanejamento
     eventos_pi: eventos_pi.checkpoint_meio_pi
     event_color: BLUE
-- date: '2026-01-07'
+- date: '2026-01-14'
   pi_day: 26
   sprint: 3
   day_in_sprint: 6
@@ -266,7 +266,7 @@
     atividades: atividades.feature_testes
     observacoes: observacoes.entregas_continuas
     event_color: GREEN
-- date: '2026-01-08'
+- date: '2026-01-15'
   pi_day: 27
   sprint: 3
   day_in_sprint: 7
@@ -276,7 +276,7 @@
     atividades: atividades.feature_testes
     observacoes: observacoes.entregas_continuas
     event_color: GREEN
-- date: '2026-01-09'
+- date: '2026-01-16'
   pi_day: 28
   sprint: 3
   day_in_sprint: 8
@@ -286,7 +286,7 @@
     atividades: atividades.consolidacao_estudos
     observacoes: observacoes.estudo_manha_50
     event_color: RED
-- date: '2026-01-12'
+- date: '2026-01-19'
   pi_day: 29
   sprint: 3
   day_in_sprint: 9
@@ -296,7 +296,7 @@
     atividades: atividades.consolidacao_estudos
     observacoes: observacoes.estudo_manha_50
     event_color: RED
-- date: '2026-01-13'
+- date: '2026-01-20'
   pi_day: 30
   sprint: 3
   day_in_sprint: 10
@@ -306,7 +306,7 @@
     atividades: atividades.changelog_review_ssc
     observacoes: observacoes.marco_release
     event_color: ORANGE
-- date: '2026-01-14'
+- date: '2026-01-21'
   pi_day: 31
   sprint: 4
   day_in_sprint: 1
@@ -316,7 +316,7 @@
     atividades: atividades.planejamento_basico
     observacoes: observacoes.itens_novos_buffer15
     event_color: YELLOW
-- date: '2026-01-15'
+- date: '2026-01-22'
   pi_day: 32
   sprint: 4
   day_in_sprint: 2
@@ -326,7 +326,7 @@
     atividades: atividades.analise_construcao
     observacoes: observacoes.desenvolvimento_incremental
     event_color: GREEN
-- date: '2026-01-16'
+- date: '2026-01-23'
   pi_day: 33
   sprint: 4
   day_in_sprint: 3
@@ -336,7 +336,7 @@
     atividades: atividades.analise_construcao
     observacoes: observacoes.desenvolvimento_incremental
     event_color: GREEN
-- date: '2026-01-19'
+- date: '2026-01-26'
   pi_day: 34
   sprint: 4
   day_in_sprint: 4
@@ -346,7 +346,7 @@
     atividades: atividades.analise_construcao
     observacoes: observacoes.desenvolvimento_incremental
     event_color: GREEN
-- date: '2026-01-20'
+- date: '2026-01-27'
   pi_day: 35
   sprint: 4
   day_in_sprint: 5
@@ -356,7 +356,7 @@
     atividades: atividades.checkpoint_verificacao
     observacoes: observacoes.ajustes_replanejamento
     event_color: BLUE
-- date: '2026-01-21'
+- date: '2026-01-28'
   pi_day: 36
   sprint: 4
   day_in_sprint: 6
@@ -368,7 +368,7 @@
     observacoes: observacoes.entregas_continuas
     eventos_pi: eventos_pi.asc_quinzenal
     event_color: GREEN
-- date: '2026-01-22'
+- date: '2026-01-29'
   pi_day: 37
   sprint: 4
   day_in_sprint: 7
@@ -378,7 +378,7 @@
     atividades: atividades.feature_testes
     observacoes: observacoes.entregas_continuas
     event_color: GREEN
-- date: '2026-01-23'
+- date: '2026-01-30'
   pi_day: 38
   sprint: 4
   day_in_sprint: 8
@@ -388,7 +388,7 @@
     atividades: atividades.consolidacao_estudos
     observacoes: observacoes.estudo_manha_50
     event_color: RED
-- date: '2026-01-26'
+- date: '2026-02-02'
   pi_day: 39
   sprint: 4
   day_in_sprint: 9
@@ -398,7 +398,7 @@
     atividades: atividades.consolidacao_estudos
     observacoes: observacoes.estudo_manha_50
     event_color: RED
-- date: '2026-01-27'
+- date: '2026-02-03'
   pi_day: 40
   sprint: 4
   day_in_sprint: 10
@@ -408,7 +408,7 @@
     atividades: atividades.changelog_review_ssc
     observacoes: observacoes.marco_release
     event_color: ORANGE
-- date: '2026-01-28'
+- date: '2026-02-04'
   pi_day: 41
   sprint: 5
   day_in_sprint: 1
@@ -418,7 +418,7 @@
     atividades: atividades.planejamento_basico
     observacoes: observacoes.itens_novos_buffer15
     event_color: YELLOW
-- date: '2026-01-29'
+- date: '2026-02-05'
   pi_day: 42
   sprint: 5
   day_in_sprint: 2
@@ -428,7 +428,7 @@
     atividades: atividades.analise_construcao
     observacoes: observacoes.desenvolvimento_incremental
     event_color: GREEN
-- date: '2026-01-30'
+- date: '2026-02-06'
   pi_day: 43
   sprint: 5
   day_in_sprint: 3
@@ -438,7 +438,7 @@
     atividades: atividades.analise_construcao
     observacoes: observacoes.desenvolvimento_incremental
     event_color: GREEN
-- date: '2026-02-02'
+- date: '2026-02-09'
   pi_day: 44
   sprint: 5
   day_in_sprint: 4
@@ -448,7 +448,7 @@
     atividades: atividades.analise_construcao
     observacoes: observacoes.desenvolvimento_incremental
     event_color: GREEN
-- date: '2026-02-03'
+- date: '2026-02-10'
   pi_day: 45
   sprint: 5
   day_in_sprint: 5
@@ -458,7 +458,7 @@
     atividades: atividades.checkpoint_verificacao
     observacoes: observacoes.ajustes_replanejamento
     event_color: BLUE
-- date: '2026-02-04'
+- date: '2026-02-11'
   pi_day: 46
   sprint: 5
   day_in_sprint: 6
@@ -468,7 +468,7 @@
     atividades: atividades.feature_testes
     observacoes: observacoes.entregas_continuas
     event_color: GREEN
-- date: '2026-02-05'
+- date: '2026-02-12'
   pi_day: 47
   sprint: 5
   day_in_sprint: 7
@@ -478,7 +478,7 @@
     atividades: atividades.feature_testes
     observacoes: observacoes.entregas_continuas
     event_color: GREEN
-- date: '2026-02-06'
+- date: '2026-02-13'
   pi_day: 48
   sprint: 5
   day_in_sprint: 8
@@ -488,7 +488,7 @@
     atividades: atividades.consolidacao_estudos
     observacoes: observacoes.estudo_manha_50
     event_color: RED
-- date: '2026-02-09'
+- date: '2026-02-19'
   pi_day: 49
   sprint: 5
   day_in_sprint: 9
@@ -500,7 +500,7 @@
     observacoes: observacoes.estudo_manha_50
     eventos_pi: eventos_pi.review_tech_day_1
     event_color: RED
-- date: '2026-02-10'
+- date: '2026-02-20'
   pi_day: 50
   sprint: 5
   day_in_sprint: 10

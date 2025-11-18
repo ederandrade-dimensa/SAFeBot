@@ -343,41 +343,44 @@ def main() -> None:
             print(f"👉 Janela ≤5 dias: próximo PI também gerado ({prox[0]['date']} → {prox[-1]['date']}).")
         sys.exit(0)
 
-    # Caso especial: já existe schedule e quero criar um NOVO PI depois do último dia.
-    if schedule and env_str:
+    # A partir daqui: já existe schedule
+    primeira = primeira_data_no_schedule(schedule)
+    ultimo = ultima_data_no_schedule(schedule)
+
+    # Tenta interpretar ENV_START (se existir)
+    env_data = None
+    if env_str:
         try:
             env_data_bruta = parse_data(env_str)
             env_data = proximo_dia_util(env_data_bruta, feriados_ou_skips)
-            ultimo_fim_existente = ultima_data_no_schedule(schedule)
         except Exception as e:
             print(f"⚠️ {ENV_START} ignorada (valor inválido: {env_str!r}): {e}", file=sys.stderr)
             env_data = None
-            ultimo_fim_existente = None
 
-        if env_data and ultimo_fim_existente and env_data > ultimo_fim_existente:
-            # 👉 Não faz reflow. Só ANEXA um novo PI com o novo planing-interval.yaml
-            proximo_pi_number = max_pi_number(schedule) + 1 or 1
-            novo_pi = gerar_um_pi(pi_tabela, env_data, feriados_ou_skips, pi_number=proximo_pi_number)
-            schedule_atualizado = schedule + novo_pi
-            salvar_yaml(ARQ_SCHEDULE, schedule_atualizado)
-            print(
-                f"✅ Novo PI #{proximo_pi_number} anexado: {len(novo_pi)} dias úteis "
-                f"({novo_pi[0]['date']} → {novo_pi[-1]['date']})."
-            )
-            sys.exit(0)
+    # Caso especial: PLANNING_INTERVAL_START_DATE depois do último dia → anexar novo PI e sair
+    if env_data and ultimo and env_data > ultimo:
+        proximo_pi_number = max_pi_number(schedule) + 1 or 1
+        novo_pi = gerar_um_pi(pi_tabela, env_data, feriados_ou_skips, pi_number=proximo_pi_number)
+        schedule_atualizado = schedule + novo_pi
+        salvar_yaml(ARQ_SCHEDULE, schedule_atualizado)
+        print(
+            f"✅ Novo PI #{proximo_pi_number} anexado: {len(novo_pi)} dias úteis "
+            f"({novo_pi[0]['date']} → {novo_pi[-1]['date']})."
+        )
+        sys.exit(0)
+
+    # NOVO COMPORTAMENTO:
+    # Se todo o schedule está no futuro em relação a hoje, não faz reflow, não recria nada.
+    if primeira and hoje < primeira:
+        print(
+            f"ℹ️ Hoje ({hoje}) é antes da primeira data agendada ({primeira}). "
+            f"Nenhuma alteração feita no schedule."
+        )
+        sys.exit(0)
 
     # --- escolha do pivot e do start do reflow ---
     pivot = hoje
     start = escolher_start_para_reflow(hoje, feriados_ou_skips)
-
-    if schedule:
-        primeira = primeira_data_no_schedule(schedule)
-        if primeira and hoje < primeira:
-            # Schedule todo no futuro: não volte no tempo.
-            # Recalcule a partir da *primeira data já agendada* (ajustada para dia útil),
-            # para aplicar novos feriados/skips/emendas.
-            pivot = primeira
-            start = proximo_dia_util(primeira, feriados_ou_skips)
 
     # --- REFLOW: manter passado (< pivot), descartar futuro (>= pivot) e recalcular a partir de start ---
     passado, futuro = split_schedule_por_data(schedule, pivot)

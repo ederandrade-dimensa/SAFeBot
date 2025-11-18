@@ -363,20 +363,55 @@ def main() -> None:
 
     schedule_atualizado = passado + pi_atual + futuro_apos
 
-    # --- checar janela de 5 dias para pré-gerar próximo PI ---
-    faltam_dias = (fim_atual - hoje).days
-    ja_existe_proximo = len(futuro_apos) > 0
+    # --- Regra 1: PLANNING_INTERVAL_START_DATE pode forçar criação de PI futuro ---
+    env_str = os.environ.get(ENV_START)
+    forcou_novo_pi_por_env = False
 
-    if faltam_dias <= 5 and not ja_existe_proximo:
-        prox_start = proximo_dia_util(fim_atual + timedelta(days=1), feriados_ou_skips)
-        prox_pi = gerar_um_pi(pi_tabela, prox_start, feriados_ou_skips)
-        schedule_atualizado += prox_pi
-        print(f"⏩ A {faltam_dias} dia(s) do fim: próximo PI pré-gerado "
-              f"({prox_pi[0]['date']} → {prox_pi[-1]['date']}).")
-    elif faltam_dias <= 5 and ja_existe_proximo:
-        print(f"ℹ️ A {faltam_dias} dia(s) do fim: já havia PI futuro no schedule; não gerei outro.")
+    if env_str:
+        try:
+            env_data_bruta = parse_data(env_str)
+            env_data = proximo_dia_util(env_data_bruta, feriados_ou_skips)
+            ultimo_fim = ultima_data_no_schedule(schedule_atualizado)
+
+            # Se o PLANNING_INTERVAL_START_DATE for após o último dia planejado,
+            # cria um novo PI começando a partir dessa data.
+            if ultimo_fim and env_data > ultimo_fim:
+                novo_pi_forcado = gerar_um_pi(pi_tabela, env_data, feriados_ou_skips)
+                schedule_atualizado += novo_pi_forcado
+                forcou_novo_pi_por_env = True
+                print(
+                    f"📌 {ENV_START}={env_str} é após o último dia planejado ({ultimo_fim}). "
+                    f"Novo PI criado de {novo_pi_forcado[0]['date']} a {novo_pi_forcado[-1]['date']}."
+                )
+        except Exception as e:
+            print(
+                f"⚠️ Variável {ENV_START} ignorada (valor inválido: {env_str!r}): {e}",
+                file=sys.stderr,
+            )
+
+    # --- Regra 2: janela de 5 dias (só se o ENV não tiver forçado novo PI) ---
+    if not forcou_novo_pi_por_env:
+        faltam_dias = (fim_atual - hoje).days
+        ja_existe_proximo = len(futuro_apos) > 0
+
+        if faltam_dias <= 5 and not ja_existe_proximo:
+            prox_start = proximo_dia_util(fim_atual + timedelta(days=1), feriados_ou_skips)
+            prox_pi = gerar_um_pi(pi_tabela, prox_start, feriados_ou_skips)
+            schedule_atualizado += prox_pi
+            print(
+                f"⏩ A {faltam_dias} dia(s) do fim: próximo PI pré-gerado "
+                f"({prox_pi[0]['date']} → {prox_pi[-1]['date']})."
+            )
+        elif faltam_dias <= 5 and ja_existe_proximo:
+            print(
+                f"ℹ️ A {faltam_dias} dia(s) do fim: já havia PI futuro no schedule; não gerei outro."
+            )
+    else:
+        print("ℹ️ Próximo PI foi criado com base em PLANNING_INTERVAL_START_DATE; "
+              "regra de 5 dias não aplicada nesta execução.")
 
     salvar_yaml(ARQ_SCHEDULE, schedule_atualizado)
+
 
     print(f"✅ Reflow aplicado. Mantidos {len(passado)} itens do passado.")
     print(f"   PI atual: {len(pi_atual)} dias úteis ({pi_atual[0]['date']} → {pi_atual[-1]['date']})")

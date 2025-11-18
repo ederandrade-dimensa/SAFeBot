@@ -1,0 +1,167 @@
+translations:
+  fase:
+    planejamento_refinamento: "Planejamento e Refinamento da Sprint"
+    construcao: "Construção Contínua"
+    checkpoint: "Checkpoint"
+    construcao_continuacao: "Continuação da Construção"
+    refactoring_estabilizacao: "Refactoring + Testes + Estabilização + Panic Key + Time to Learning"
+    fechamento_retro: "Fechamento e Retrô"
+  atividades:
+    planejamento_pi_desdobramento: "Priorização (desdobramento PI planning) + Planning + Indicadores (BCP, throughput, etc)"
+    planejamento_basico: "Priorização + Planning + Indicadores"
+    analise_construcao: "Análise + Construção (feature + testes)"
+    checkpoint_verificacao: "Verificação de % concluído, riscos e impedimentos"
+    feature_testes: "Feature + Testes unitários e integrados"
+    consolidacao_estudos: "Consolidação de testes + Estudos técnicos"
+    changelog_review_ssc: "Changelog, Review e Start/Stop/Continue"
+  observacoes:
+    itens_novos_buffer15_urgentes: "Itens novos entram no ciclo seguinte. Planejamento do Buffer de 15% para atendimentos urgentes"
+    desenvolvimento_incremental: "Desenvolvimento incremental"
+    ajustes_replanejamento: "Ajustes e replanejamento"
+    entregas_continuas: "Entregas contínuas permitidas"
+    estudo_manha_50: "50% do time em estudo pela manhã"
+    marco_release: "Marco oficial de release"
+    itens_novos_buffer15: "Itens novos entram no ciclo seguinte. Planejamento do Buffer 15%"
+  eventos_pi:
+    pi_planning_dia1: "PI Planning (Dia 1/2)"
+    pi_planning_dia2: "PI Planning (Dia 2/2)"
+    asc_quinzenal: "ASC (quinzenal)"
+    checkpoint_meio_pi: "Checkpoint de Meio PI"
+    review_tech_day_1: "Review Final do PI + Tech Day (Dia 1/2)"
+    review_tech_day_2_encerramento: "Review Final do PI + Tech Day (Dia 2/2) · Encerramento do PI · Sprint 0 (preparação para o próximo PI)"
+
+planning_interval:
+  sprints: 1
+  dias_por_sprint: 16
+  total_dias: 16
+  dias:
+    - dia: 1
+      sprint: 1
+      dia_sprint: 1
+      fase: "fase.planejamento_refinamento"
+      atividades: "atividades.planejamento_pi_desdobramento"
+      observacoes: "observacoes.itens_novos_buffer15_urgentes"
+      eventos_pi: "eventos_pi.pi_planning_dia1"
+      event_color: "YELLOW"
+
+    - dia: 2
+      sprint: 1
+      dia_sprint: 2
+      fase: "fase.construcao"
+      atividades: "atividades.analise_construcao"
+      observacoes: "observacoes.desenvolvimento_incremental"
+      eventos_pi: "eventos_pi.pi_planning_dia2"
+      event_color: "GREEN"
+
+    - dia: 3
+      sprint: 1
+      dia_sprint: 3
+      fase: "fase.construcao"
+      atividades: "atividades.analise_construcao"
+      observacoes: "observacoes.desenvolvimento_incremental"
+      event_color: "GREEN"
+
+    - dia: 4
+      sprint: 1
+      dia_sprint: 4
+      fase: "fase.construcao"
+      atividades: "atividades.analise_construcao"
+      observacoes: "observacoes.desenvolvimento_incremental"
+      event_color: "GREEN"
+
+    - dia: 5
+      sprint: 1
+      dia_sprint: 5
+      fase: "fase.checkpoint"
+      atividades: "atividades.checkpoint_verificacao"
+      observacoes: "observacoes.ajustes_replanejamento"
+      event_color: "BLUE"
+
+    - dia: 6
+      sprint: 1
+      dia_sprint: 6
+      fase: "fase.construcao_continuacao"
+      atividades: "atividades.feature_testes"
+      observacoes: "observacoes.entregas_continuas"
+      event_color: "GREEN"
+
+    - dia: 7
+      sprint: 1
+      dia_sprint: 7
+      fase: "fase.construcao_continuacao"
+      atividades: "atividades.feature_testes"
+      observacoes: "observacoes.entregas_continuas"
+      event_color: "GREEN"
+
+    - dia: 8
+      sprint: 1
+      dia_sprint: 8
+      fase: "fase.construcao_continuacao"
+      atividades: "atividades.feature_testes"
+      observacoes: "observacoes.entregas_continuas"
+      event_color: "GREEN"
+
+    - dia: 9
+      sprint: 1
+      dia_sprint: 9
+      fase: "fase.construcao_continuacao"
+      atividades: "atividades.feature_testes"
+      observacoes: "observacoes.entregas_continuas"
+      event_color: "GREEN"
+
+    - dia: 10
+      sprint: 1
+      dia_sprint: 10
+      fase: "fase.checkpoint"
+      atividades: "atividades.checkpoint_verificacao"
+      observacoes: "observacoes.ajustes_replanejamento"
+      event_color: "BLUE"
+
+    - dia: 11
+      sprint: 1
+      dia_sprint: 11
+      fase: "fase.construcao_continuacao"
+      atividades: "atividades.feature_testes"
+      observacoes: "observacoes.entregas_continuas"
+      event_color: "GREEN"
+
+    - dia: 12
+      sprint: 1
+      dia_sprint: 12
+      fase: "fase.construcao_continuacao"
+      atividades: "atividades.feature_testes"
+      observacoes: "observacoes.entregas_continuas"
+      event_color: "GREEN"
+
+    - dia: 13
+      sprint: 1
+      dia_sprint: 12
+      fase: "fase.construcao_continuacao"
+      atividades: "atividades.feature_testes"
+      observacoes: "observacoes.entregas_continuas"
+      event_color: "GREEN"
+
+    - dia: 14
+      sprint: 1
+      dia_sprint: 14
+      fase: "fase.refactoring_estabilizacao"
+      atividades: "atividades.consolidacao_estudos"
+      observacoes: "observacoes.estudo_manha_50"
+      event_color: "RED"
+
+    - dia: 15
+      sprint: 1
+      dia_sprint: 15
+      fase: "fase.refactoring_estabilizacao"
+      atividades: "atividades.consolidacao_estudos"
+      observacoes: "observacoes.estudo_manha_50"
+      event_color: "RED"
+
+    - dia: 16
+      sprint: 1
+      dia_sprint: 16
+      fase: "fase.fechamento_retro"
+      atividades: "atividades.changelog_review_ssc"
+      observacoes: "observacoes.marco_release"
+      event_color: "ORANGE"
+

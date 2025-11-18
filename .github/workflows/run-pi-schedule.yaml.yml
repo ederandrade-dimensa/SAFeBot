@@ -10,6 +10,11 @@ on:
         description: "Data inicial (YYYY-MM-DD) – usada apenas se o arquivo ainda não existir"
         required: false
         default: "2025-11-03"
+      PLANING_INTERVAL_FILE:
+        description: "Paning Interval YAML file to base the schedule on"
+        required: false
+        default: "planing-interval.yaml"
+
 
 permissions:
   contents: write
@@ -42,6 +47,7 @@ jobs:
         env:
           # Variáveis de ambiente lidas pelo script
           PLANNING_INTERVAL_START_DATE: ${{ github.event.inputs.START_DATE || '2025-11-03' }}
+          PLANING_INTERVAL_FILE: ${{ github.event.inputs.PLANING_INTERVAL_FILE || 'planing-interval.yaml' }}
           # <<< NOVO: variável global vinda de repo/env secrets
           SKIP_EMENDAS: ${{ vars.SKIP_EMENDAS || 'true' }}
         run: |

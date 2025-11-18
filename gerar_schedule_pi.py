@@ -108,13 +108,24 @@ def carregar_schedule(caminho: Path) -> List[Dict[str, Any]]:
         return dados
     raise ValueError("Formato de planing-interval-schedule.yaml inesperado (lista ou dict{'schedule': [...]}).")
 
-def ultima_data_no_schedule(schedule: List[Dict[str, Any]]) -> Optional[date]:
-    if not schedule:
-        return None
+def data_do_item(o: Dict[str, Any]) -> Optional[date]:
     try:
-        return max(parse_data(item["date"]) for item in schedule if "date" in item)
+        if "date" in o:
+            return parse_data(o["date"])
     except Exception:
-        return None
+        pass
+    return None
+
+def split_schedule_por_data(schedule: List[Dict[str, Any]], pivot: date):
+    """Retorna (passado, futuro) onde passado = datas < pivot; futuro = datas >= pivot"""
+    passado, futuro = [], []
+    for item in schedule:
+        d = data_do_item(item)
+        if d is None:
+            passado.append(item)  # conserva itens sem data
+            continue
+        (passado if d < pivot else futuro).append(item)
+    return passado, futuro
 # ------------------------------------------------------------
 
 # --------- Detecção robusta da tabela do PI -----------------
@@ -177,27 +188,6 @@ def carregar_pi_tabela(caminho: Path) -> List[Dict[str, Any]]:
 # ------------------------------------------------------------
 
 # ----------------- Funções auxiliares novas -----------------
-def data_do_item(o: Dict[str, Any]) -> Optional[date]:
-    try:
-        if "date" in o:
-            return parse_data(o["date"])
-    except Exception:
-        pass
-    return None
-
-def split_schedule_por_data(schedule: List[Dict[str, Any]], pivot: date):
-    """Retorna (passado, futuro) onde passado = datas < pivot; futuro = datas >= pivot"""
-    passado, futuro = [], []
-    for item in schedule:
-        d = data_do_item(item)
-        if d is None:
-            passado.append(item)  # conserva itens sem data
-            continue
-        (passado if d < pivot else futuro).append(item)
-    return passado, futuro
-# ------------------------------------------------------------
-
-# ----------------- Lógica de negócio ------------------------
 def escolher_start_para_reflow(hoje: date, feriados_set: Set[date]) -> date:
     return proximo_dia_util(hoje, feriados_set)
 
@@ -209,7 +199,12 @@ def montar_descricao(item: Dict[str, Any]) -> str:
             partes.append(str(v))
     return " | ".join(partes) if partes else ""
 
-def gerar_um_pi(pi_tabela: List[Dict[str, Any]], start: date, feriados_set: Set[date]) -> List[Dict[str, Any]]:
+def gerar_um_pi(
+        pi_tabela: List[Dict[str, Any]],
+        start: date,
+        feriados_set: Set[date],
+        pi_number: Optional[int] = None,
+) -> List[Dict[str, Any]]:
     tabela = sorted(pi_tabela, key=lambda x: int(x.get("dia", 0)))
     saida = []
     data_corrente = start
@@ -217,7 +212,7 @@ def gerar_um_pi(pi_tabela: List[Dict[str, Any]], start: date, feriados_set: Set[
         if not eh_dia_util(data_corrente, feriados_set):
             data_corrente = proximo_dia_util(data_corrente, feriados_set)
 
-        registro = {
+        registro: Dict[str, Any] = {
             "date": data_corrente.isoformat(),
             "pi_day": int(item.get("dia")),
             "sprint": int(item.get("sprint")),
@@ -230,12 +225,14 @@ def gerar_um_pi(pi_tabela: List[Dict[str, Any]], start: date, feriados_set: Set[
         if "cor" in item and item["cor"] is not None:
             registro["cor"] = item["cor"]
 
+        if pi_number is not None:
+            registro["pi"] = pi_number
+
         saida.append(registro)
         data_corrente += timedelta(days=1)
     return saida
 
 
-# ----------------- Utilidades / helpers NOVOS -----------------
 def calcular_emendas(feriados: Set[date]) -> Set[date]:
     """
     Regras:
@@ -274,6 +271,15 @@ def ultima_data_no_schedule(schedule: List[Dict[str, Any]]) -> Optional[date]:
     except Exception:
         return None
 
+def max_pi_number(schedule: List[Dict[str, Any]]) -> int:
+    max_pi = 0
+    for item in schedule:
+        pi = item.get("pi")
+        if isinstance(pi, int) and pi > max_pi:
+            max_pi = pi
+    return max_pi
+
+# ----------------- Lógica principal -------------------------
 def main() -> None:
     # --- entradas obrigatórias ---
     if not ARQ_FERIADOS.exists():
@@ -293,8 +299,6 @@ def main() -> None:
         emendas_set = calcular_emendas(feriados_set)
         if emendas_set:
             print(f"Emendas habilitadas: {len(emendas_set)} dia(s) incluído(s) como skip devido a feriados em 3ª/5ª.")
-            # dica opcional: se quiser ver quais são, descomente a linha abaixo
-            # print('  ' + ', '.join(sorted(d.isoformat() for d in emendas_set)))
 
     if skip_set:
         print(f"Skip dates: {len(skip_set)} data(s) será(ão) pulada(s) ({ARQ_SKIP}).")
@@ -314,25 +318,53 @@ def main() -> None:
     # --- schedule existente ---
     schedule = carregar_schedule(ARQ_SCHEDULE)
     hoje = hoje_sao_paulo()
+    env_str = os.environ.get(ENV_START)
 
     # Se não existe schedule ainda, usa ENV_START como bootstrap
     if not schedule:
-        env_str = os.environ.get(ENV_START)
         if not env_str:
             print(f"ERRO: {ARQ_SCHEDULE} não existe e {ENV_START} não foi definida.", file=sys.stderr)
             sys.exit(1)
+
         start_boot = proximo_dia_util(parse_data(env_str), feriados_ou_skips)
-        atual = gerar_um_pi(pi_tabela, start_boot, feriados_ou_skips)
+
+        # Primeiro PI sempre como pi = 1
+        atual = gerar_um_pi(pi_tabela, start_boot, feriados_ou_skips, pi_number=1)
         salvar_yaml(ARQ_SCHEDULE, atual)
         fim = parse_data(atual[-1]["date"])
         print(f"✅ Schedule criado do zero: {len(atual)} dias úteis ({atual[0]['date']} → {atual[-1]['date']}).")
-        # Se já estiver a ≤5 dias do fim, já emenda o próximo PI
-        if (fim - hoje).days <= 5:
+
+        # Se já estiver a ≤5 dias do fim, já emenda o próximo PI (pi = 2)
+        faltam_dias = (fim - hoje).days
+        if faltam_dias <= 5:
             prox_start = proximo_dia_util(fim + timedelta(days=1), feriados_ou_skips)
-            prox = gerar_um_pi(pi_tabela, prox_start, feriados_ou_skips)
+            prox = gerar_um_pi(pi_tabela, prox_start, feriados_ou_skips, pi_number=2)
             salvar_yaml(ARQ_SCHEDULE, atual + prox)
             print(f"👉 Janela ≤5 dias: próximo PI também gerado ({prox[0]['date']} → {prox[-1]['date']}).")
         sys.exit(0)
+
+    # Caso especial: já existe schedule e quero criar um NOVO PI depois do último dia.
+    if schedule and env_str:
+        try:
+            env_data_bruta = parse_data(env_str)
+            env_data = proximo_dia_util(env_data_bruta, feriados_ou_skips)
+            ultimo_fim_existente = ultima_data_no_schedule(schedule)
+        except Exception as e:
+            print(f"⚠️ {ENV_START} ignorada (valor inválido: {env_str!r}): {e}", file=sys.stderr)
+            env_data = None
+            ultimo_fim_existente = None
+
+        if env_data and ultimo_fim_existente and env_data > ultimo_fim_existente:
+            # 👉 Não faz reflow. Só ANEXA um novo PI com o novo planing-interval.yaml
+            proximo_pi_number = max_pi_number(schedule) + 1 or 1
+            novo_pi = gerar_um_pi(pi_tabela, env_data, feriados_ou_skips, pi_number=proximo_pi_number)
+            schedule_atualizado = schedule + novo_pi
+            salvar_yaml(ARQ_SCHEDULE, schedule_atualizado)
+            print(
+                f"✅ Novo PI #{proximo_pi_number} anexado: {len(novo_pi)} dias úteis "
+                f"({novo_pi[0]['date']} → {novo_pi[-1]['date']})."
+            )
+            sys.exit(0)
 
     # --- escolha do pivot e do start do reflow ---
     pivot = hoje
@@ -349,7 +381,20 @@ def main() -> None:
 
     # --- REFLOW: manter passado (< pivot), descartar futuro (>= pivot) e recalcular a partir de start ---
     passado, futuro = split_schedule_por_data(schedule, pivot)
-    pi_atual = gerar_um_pi(pi_tabela, start, feriados_ou_skips)
+
+    # Descobre qual PI estou recalculando
+    if passado:
+        pi_atual_number = max_pi_number(passado)
+        if pi_atual_number == 0 and futuro:
+            pi_atual_number = futuro[0].get("pi", 1)
+        elif pi_atual_number == 0:
+            pi_atual_number = 1
+    elif futuro:
+        pi_atual_number = futuro[0].get("pi", 1)
+    else:
+        pi_atual_number = 1
+
+    pi_atual = gerar_um_pi(pi_tabela, start, feriados_ou_skips, pi_number=pi_atual_number)
     fim_atual = parse_data(pi_atual[-1]["date"])
 
     # preserva apenas o que vier *depois* do fim recalculado
@@ -363,58 +408,26 @@ def main() -> None:
 
     schedule_atualizado = passado + pi_atual + futuro_apos
 
-    # --- Regra 1: PLANNING_INTERVAL_START_DATE pode forçar criação de PI futuro ---
-    env_str = os.environ.get(ENV_START)
-    forcou_novo_pi_por_env = False
+    # --- checar janela de 5 dias para pré-gerar próximo PI ---
+    faltam_dias = (fim_atual - hoje).days
+    ja_existe_proximo = len(futuro_apos) > 0
 
-    if env_str:
-        try:
-            env_data_bruta = parse_data(env_str)
-            env_data = proximo_dia_util(env_data_bruta, feriados_ou_skips)
-            ultimo_fim = ultima_data_no_schedule(schedule_atualizado)
-
-            # Se o PLANNING_INTERVAL_START_DATE for após o último dia planejado,
-            # cria um novo PI começando a partir dessa data.
-            if ultimo_fim and env_data > ultimo_fim:
-                novo_pi_forcado = gerar_um_pi(pi_tabela, env_data, feriados_ou_skips)
-                schedule_atualizado += novo_pi_forcado
-                forcou_novo_pi_por_env = True
-                print(
-                    f"📌 {ENV_START}={env_str} é após o último dia planejado ({ultimo_fim}). "
-                    f"Novo PI criado de {novo_pi_forcado[0]['date']} a {novo_pi_forcado[-1]['date']}."
-                )
-        except Exception as e:
-            print(
-                f"⚠️ Variável {ENV_START} ignorada (valor inválido: {env_str!r}): {e}",
-                file=sys.stderr,
-            )
-
-    # --- Regra 2: janela de 5 dias (só se o ENV não tiver forçado novo PI) ---
-    if not forcou_novo_pi_por_env:
-        faltam_dias = (fim_atual - hoje).days
-        ja_existe_proximo = len(futuro_apos) > 0
-
-        if faltam_dias <= 5 and not ja_existe_proximo:
-            prox_start = proximo_dia_util(fim_atual + timedelta(days=1), feriados_ou_skips)
-            prox_pi = gerar_um_pi(pi_tabela, prox_start, feriados_ou_skips)
-            schedule_atualizado += prox_pi
-            print(
-                f"⏩ A {faltam_dias} dia(s) do fim: próximo PI pré-gerado "
-                f"({prox_pi[0]['date']} → {prox_pi[-1]['date']})."
-            )
-        elif faltam_dias <= 5 and ja_existe_proximo:
-            print(
-                f"ℹ️ A {faltam_dias} dia(s) do fim: já havia PI futuro no schedule; não gerei outro."
-            )
-    else:
-        print("ℹ️ Próximo PI foi criado com base em PLANNING_INTERVAL_START_DATE; "
-              "regra de 5 dias não aplicada nesta execução.")
+    if faltam_dias <= 5 and not ja_existe_proximo:
+        prox_start = proximo_dia_util(fim_atual + timedelta(days=1), feriados_ou_skips)
+        proximo_pi_number = max_pi_number(schedule_atualizado) + 1 or 1
+        prox_pi = gerar_um_pi(pi_tabela, prox_start, feriados_ou_skips, pi_number=proximo_pi_number)
+        schedule_atualizado += prox_pi
+        print(
+            f"⏩ A {faltam_dias} dia(s) do fim: próximo PI #{proximo_pi_number} pré-gerado "
+            f"({prox_pi[0]['date']} → {prox_pi[-1]['date']})."
+        )
+    elif faltam_dias <= 5 and ja_existe_proximo:
+        print(f"ℹ️ A {faltam_dias} dia(s) do fim: já havia PI futuro no schedule; não gerei outro.")
 
     salvar_yaml(ARQ_SCHEDULE, schedule_atualizado)
 
-
     print(f"✅ Reflow aplicado. Mantidos {len(passado)} itens do passado.")
-    print(f"   PI atual: {len(pi_atual)} dias úteis ({pi_atual[0]['date']} → {pi_atual[-1]['date']})")
+    print(f"   PI atual (#{pi_atual_number}): {len(pi_atual)} dias úteis ({pi_atual[0]['date']} → {pi_atual[-1]['date']})")
     if faltam_dias <= 5:
         if ja_existe_proximo:
             print("   Próximo PI já existia e foi preservado.")

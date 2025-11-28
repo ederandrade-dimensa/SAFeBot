@@ -431,7 +431,7 @@ planning_interval:
       fase: "fase.refactoring_estabilizacao"
       atividades: "atividades.consolidacao_estudos"
       observacoes: "observacoes.estudo_manha_50"
-      56pi: "eventos_pi.review_tech_day_1"
+      eventos_pi: "eventos_pi.review_tech_day_1"
       event_color: "GRAPE"
 
     - dia: 50

@@ -1,7 +1,7 @@
 translations:
   fase:
     planejamento_pi: "PI Planning"
-    planejamento_refinamento: "Sprint Planning"
+    planejamento_refinamento: "Sprint Planning / ïnicio da Construção"
     construcao: "Construção Contínua"
     checkpoint: "Checkpoint"
     construcao_continuacao: "Continuação da Construção"
@@ -51,6 +51,7 @@ planning_interval:
       fase: "fase.planejamento_pi"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
+      eventos_pi: "eventos_pi.pi_planning_dia2"
       event_color: "GRAPE"
 
     - dia: 3
@@ -59,7 +60,7 @@ planning_interval:
       fase: "fase.planejamento_refinamento"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
-      event_color: "GRAPE"
+      event_color: "PEACOCK"
 
     - dia: 4
       sprint: 1

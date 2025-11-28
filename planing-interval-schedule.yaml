@@ -1,0 +1,177 @@
+- date: '2025-12-01'
+  pi_day: 1
+  sprint: 1
+  day_in_sprint: 1
+  descricao: fase.planejamento_refinamento | atividades.planejamento_pi_desdobramento
+    | observacoes.itens_novos_buffer15_urgentes
+  meta:
+    fase: fase.planejamento_refinamento
+    atividades: atividades.planejamento_pi_desdobramento
+    observacoes: observacoes.itens_novos_buffer15_urgentes
+    event_color: GRAPE
+  pi: 1
+- date: '2025-12-02'
+  pi_day: 2
+  sprint: 1
+  day_in_sprint: 2
+  descricao: fase.construcao | atividades.analise_construcao | observacoes.desenvolvimento_incremental
+  meta:
+    fase: fase.construcao
+    atividades: atividades.analise_construcao
+    observacoes: observacoes.desenvolvimento_incremental
+    event_color: GRAPE
+  pi: 1
+- date: '2025-12-03'
+  pi_day: 3
+  sprint: 1
+  day_in_sprint: 3
+  descricao: fase.construcao | atividades.analise_construcao | observacoes.desenvolvimento_incremental
+  meta:
+    fase: fase.construcao
+    atividades: atividades.analise_construcao
+    observacoes: observacoes.desenvolvimento_incremental
+    event_color: YELLOW
+  pi: 1
+- date: '2025-12-04'
+  pi_day: 4
+  sprint: 1
+  day_in_sprint: 4
+  descricao: fase.construcao | atividades.analise_construcao | observacoes.desenvolvimento_incremental
+  meta:
+    fase: fase.construcao
+    atividades: atividades.analise_construcao
+    observacoes: observacoes.desenvolvimento_incremental
+    event_color: YELLOW
+  pi: 1
+- date: '2025-12-05'
+  pi_day: 5
+  sprint: 1
+  day_in_sprint: 5
+  descricao: fase.checkpoint | atividades.checkpoint_verificacao | observacoes.ajustes_replanejamento
+  meta:
+    fase: fase.checkpoint
+    atividades: atividades.checkpoint_verificacao
+    observacoes: observacoes.ajustes_replanejamento
+    event_color: RED
+  pi: 1
+- date: '2025-12-08'
+  pi_day: 6
+  sprint: 1
+  day_in_sprint: 6
+  descricao: fase.construcao_continuacao | atividades.feature_testes | observacoes.entregas_continuas
+  meta:
+    fase: fase.construcao_continuacao
+    atividades: atividades.feature_testes
+    observacoes: observacoes.entregas_continuas
+    event_color: YELLOW
+  pi: 1
+- date: '2025-12-09'
+  pi_day: 7
+  sprint: 1
+  day_in_sprint: 7
+  descricao: fase.construcao_continuacao | atividades.feature_testes | observacoes.entregas_continuas
+  meta:
+    fase: fase.construcao_continuacao
+    atividades: atividades.feature_testes
+    observacoes: observacoes.entregas_continuas
+    event_color: YELLOW
+  pi: 1
+- date: '2025-12-10'
+  pi_day: 8
+  sprint: 1
+  day_in_sprint: 8
+  descricao: fase.construcao_continuacao | atividades.feature_testes | observacoes.entregas_continuas
+  meta:
+    fase: fase.construcao_continuacao
+    atividades: atividades.feature_testes
+    observacoes: observacoes.entregas_continuas
+    event_color: YELLOW
+  pi: 1
+- date: '2025-12-11'
+  pi_day: 9
+  sprint: 1
+  day_in_sprint: 9
+  descricao: fase.construcao_continuacao | atividades.feature_testes | observacoes.entregas_continuas
+  meta:
+    fase: fase.construcao_continuacao
+    atividades: atividades.feature_testes
+    observacoes: observacoes.entregas_continuas
+    event_color: YELLOW
+  pi: 1
+- date: '2025-12-12'
+  pi_day: 10
+  sprint: 1
+  day_in_sprint: 10
+  descricao: fase.checkpoint | atividades.checkpoint_verificacao | observacoes.ajustes_replanejamento
+  meta:
+    fase: fase.checkpoint
+    atividades: atividades.checkpoint_verificacao
+    observacoes: observacoes.ajustes_replanejamento
+    event_color: RED
+  pi: 1
+- date: '2025-12-15'
+  pi_day: 11
+  sprint: 1
+  day_in_sprint: 11
+  descricao: fase.construcao_continuacao | atividades.feature_testes | observacoes.entregas_continuas
+  meta:
+    fase: fase.construcao_continuacao
+    atividades: atividades.feature_testes
+    observacoes: observacoes.entregas_continuas
+    event_color: YELLOW
+  pi: 1
+- date: '2025-12-16'
+  pi_day: 12
+  sprint: 1
+  day_in_sprint: 12
+  descricao: fase.construcao_continuacao | atividades.feature_testes | observacoes.entregas_continuas
+  meta:
+    fase: fase.construcao_continuacao
+    atividades: atividades.feature_testes
+    observacoes: observacoes.entregas_continuas
+    event_color: YELLOW
+  pi: 1
+- date: '2025-12-17'
+  pi_day: 13
+  sprint: 1
+  day_in_sprint: 12
+  descricao: fase.construcao_continuacao | atividades.feature_testes | observacoes.entregas_continuas
+  meta:
+    fase: fase.construcao_continuacao
+    atividades: atividades.feature_testes
+    observacoes: observacoes.entregas_continuas
+    event_color: YELLOW
+  pi: 1
+- date: '2025-12-18'
+  pi_day: 14
+  sprint: 1
+  day_in_sprint: 14
+  descricao: fase.refactoring_estabilizacao | atividades.consolidacao_estudos | observacoes.estudo_manha_50
+  meta:
+    fase: fase.refactoring_estabilizacao
+    atividades: atividades.consolidacao_estudos
+    observacoes: observacoes.estudo_manha_50
+    event_color: GRAPE
+  pi: 1
+- date: '2025-12-19'
+  pi_day: 15
+  sprint: 1
+  day_in_sprint: 15
+  descricao: fase.refactoring_estabilizacao | atividades.consolidacao_estudos | observacoes.estudo_manha_50
+  meta:
+    fase: fase.refactoring_estabilizacao
+    atividades: atividades.consolidacao_estudos
+    observacoes: observacoes.estudo_manha_50
+    event_color: GRAPE
+  pi: 1
+- date: '2025-12-22'
+  pi_day: 16
+  sprint: 1
+  day_in_sprint: 16
+  descricao: fase.fechamento_retro | atividades.changelog_review_ssc | observacoes.marco_release
+  meta:
+    fase: fase.fechamento_retro
+    atividades: atividades.changelog_review_ssc
+    observacoes: observacoes.marco_release
+    event_color: FLAMINGO
+  pi: 1

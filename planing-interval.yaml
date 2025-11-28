@@ -1,6 +1,7 @@
 translations:
   fase:
-    planejamento_refinamento: "Planejamento e Refinamento da Sprint"
+    planejamento_pi: "PI Planning"
+    planejamento_refinamento: "Sprint Planning"
     construcao: "Construção Contínua"
     checkpoint: "Checkpoint"
     construcao_continuacao: "Continuação da Construção"
@@ -38,28 +39,27 @@ planning_interval:
     - dia: 1
       sprint: 1
       dia_sprint: 1
-      fase: "fase.planejamento_refinamento"
+      fase: "fase.planejamento_pi"
       atividades: "atividades.planejamento_pi_desdobramento"
       observacoes: "observacoes.itens_novos_buffer15_urgentes"
       eventos_pi: "eventos_pi.pi_planning_dia1"
-      event_color: "YELLOW"
+      event_color: "GRAPE"
 
     - dia: 2
       sprint: 1
       dia_sprint: 2
-      fase: "fase.construcao"
+      fase: "fase.planejamento_pi"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
-      eventos_pi: "eventos_pi.pi_planning_dia2"
-      event_color: "GREEN"
+      event_color: "GRAPE"
 
     - dia: 3
       sprint: 1
       dia_sprint: 3
-      fase: "fase.construcao"
+      fase: "fase.planejamento_refinamento"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
-      event_color: "GREEN"
+      event_color: "GRAPE"
 
     - dia: 4
       sprint: 1
@@ -67,7 +67,7 @@ planning_interval:
       fase: "fase.construcao"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
-      event_color: "GREEN"
+      event_color: "YELLOW"
 
     - dia: 5
       sprint: 1
@@ -75,7 +75,7 @@ planning_interval:
       fase: "fase.checkpoint"
       atividades: "atividades.checkpoint_verificacao"
       observacoes: "observacoes.ajustes_replanejamento"
-      event_color: "BLUE"
+      event_color: "RED"
 
     - dia: 6
       sprint: 1
@@ -83,7 +83,7 @@ planning_interval:
       fase: "fase.construcao_continuacao"
       atividades: "atividades.feature_testes"
       observacoes: "observacoes.entregas_continuas"
-      event_color: "GREEN"
+      event_color: "YELLOW"
 
     - dia: 7
       sprint: 1
@@ -91,7 +91,7 @@ planning_interval:
       fase: "fase.construcao_continuacao"
       atividades: "atividades.feature_testes"
       observacoes: "observacoes.entregas_continuas"
-      event_color: "GREEN"
+      event_color: "YELLOW"
 
     - dia: 8
       sprint: 1
@@ -99,7 +99,7 @@ planning_interval:
       fase: "fase.refactoring_estabilizacao"
       atividades: "atividades.consolidacao_estudos"
       observacoes: "observacoes.estudo_manha_50"
-      event_color: "RED"
+      event_color: "GRAPE"
 
     - dia: 9
       sprint: 1
@@ -107,7 +107,7 @@ planning_interval:
       fase: "fase.refactoring_estabilizacao"
       atividades: "atividades.consolidacao_estudos"
       observacoes: "observacoes.estudo_manha_50"
-      event_color: "RED"
+      event_color: "GRAPE"
 
     - dia: 10
       sprint: 1
@@ -115,7 +115,7 @@ planning_interval:
       fase: "fase.fechamento_retro"
       atividades: "atividades.changelog_review_ssc"
       observacoes: "observacoes.marco_release"
-      event_color: "ORANGE"
+      event_color: "FLAMINGO"
 
     - dia: 11
       sprint: 2
@@ -123,7 +123,7 @@ planning_interval:
       fase: "fase.planejamento_refinamento"
       atividades: "atividades.planejamento_basico"
       observacoes: "observacoes.itens_novos_buffer15"
-      event_color: "YELLOW"
+      event_color: "PEACOCK"
 
     - dia: 12
       sprint: 2
@@ -131,7 +131,7 @@ planning_interval:
       fase: "fase.construcao"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
-      event_color: "GREEN"
+      event_color: "YELLOW"
 
     - dia: 13
       sprint: 2
@@ -139,7 +139,7 @@ planning_interval:
       fase: "fase.construcao"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
-      event_color: "GREEN"
+      event_color: "YELLOW"
 
     - dia: 14
       sprint: 2
@@ -147,7 +147,7 @@ planning_interval:
       fase: "fase.construcao"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
-      event_color: "GREEN"
+      event_color: "YELLOW"
 
     - dia: 15
       sprint: 2
@@ -155,7 +155,7 @@ planning_interval:
       fase: "fase.checkpoint"
       atividades: "atividades.checkpoint_verificacao"
       observacoes: "observacoes.ajustes_replanejamento"
-      event_color: "BLUE"
+      event_color: "RED"
 
     - dia: 16
       sprint: 2
@@ -164,7 +164,7 @@ planning_interval:
       atividades: "atividades.feature_testes"
       observacoes: "observacoes.entregas_continuas"
       eventos_pi: "eventos_pi.asc_quinzenal"
-      event_color: "GREEN"
+      event_color: "ORANGE"
 
     - dia: 17
       sprint: 2
@@ -172,7 +172,7 @@ planning_interval:
       fase: "fase.construcao_continuacao"
       atividades: "atividades.feature_testes"
       observacoes: "observacoes.entregas_continuas"
-      event_color: "GREEN"
+      event_color: "YELLOW"
 
     - dia: 18
       sprint: 2
@@ -180,7 +180,7 @@ planning_interval:
       fase: "fase.refactoring_estabilizacao"
       atividades: "atividades.consolidacao_estudos"
       observacoes: "observacoes.estudo_manha_50"
-      event_color: "RED"
+      event_color: "GRAPE"
 
     - dia: 19
       sprint: 2
@@ -188,7 +188,7 @@ planning_interval:
       fase: "fase.refactoring_estabilizacao"
       atividades: "atividades.consolidacao_estudos"
       observacoes: "observacoes.estudo_manha_50"
-      event_color: "RED"
+      event_color: "GRAPE"
 
     - dia: 20
       sprint: 2
@@ -196,7 +196,7 @@ planning_interval:
       fase: "fase.fechamento_retro"
       atividades: "atividades.changelog_review_ssc"
       observacoes: "observacoes.marco_release"
-      event_color: "ORANGE"
+      event_color: "FLAMINGO"
 
     - dia: 21
       sprint: 3
@@ -204,7 +204,7 @@ planning_interval:
       fase: "fase.planejamento_refinamento"
       atividades: "atividades.planejamento_basico"
       observacoes: "observacoes.itens_novos_buffer15"
-      event_color: "YELLOW"
+      event_color: "PEACOCK"
 
     - dia: 22
       sprint: 3
@@ -212,7 +212,7 @@ planning_interval:
       fase: "fase.construcao"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
-      event_color: "GREEN"
+      event_color: "YELLOW"
 
     - dia: 23
       sprint: 3
@@ -220,7 +220,7 @@ planning_interval:
       fase: "fase.construcao"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
-      event_color: "GREEN"
+      event_color: "YELLOW"
 
     - dia: 24
       sprint: 3
@@ -228,7 +228,7 @@ planning_interval:
       fase: "fase.construcao"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
-      event_color: "GREEN"
+      event_color: "YELLOW"
 
     - dia: 25
       sprint: 3
@@ -237,7 +237,7 @@ planning_interval:
       atividades: "atividades.checkpoint_verificacao"
       observacoes: "observacoes.ajustes_replanejamento"
       eventos_pi: "eventos_pi.checkpoint_meio_pi"
-      event_color: "BLUE"
+      event_color: "RED"
 
     - dia: 26
       sprint: 3
@@ -245,7 +245,7 @@ planning_interval:
       fase: "fase.construcao_continuacao"
       atividades: "atividades.feature_testes"
       observacoes: "observacoes.entregas_continuas"
-      event_color: "GREEN"
+      event_color: "YELLOW"
 
     - dia: 27
       sprint: 3
@@ -253,7 +253,7 @@ planning_interval:
       fase: "fase.construcao_continuacao"
       atividades: "atividades.feature_testes"
       observacoes: "observacoes.entregas_continuas"
-      event_color: "GREEN"
+      event_color: "YELLOW"
 
     - dia: 28
       sprint: 3
@@ -261,7 +261,7 @@ planning_interval:
       fase: "fase.refactoring_estabilizacao"
       atividades: "atividades.consolidacao_estudos"
       observacoes: "observacoes.estudo_manha_50"
-      event_color: "RED"
+      event_color: "GRAPE"
 
     - dia: 29
       sprint: 3
@@ -269,7 +269,7 @@ planning_interval:
       fase: "fase.refactoring_estabilizacao"
       atividades: "atividades.consolidacao_estudos"
       observacoes: "observacoes.estudo_manha_50"
-      event_color: "RED"
+      event_color: "GRAPE"
 
     - dia: 30
       sprint: 3
@@ -277,7 +277,7 @@ planning_interval:
       fase: "fase.fechamento_retro"
       atividades: "atividades.changelog_review_ssc"
       observacoes: "observacoes.marco_release"
-      event_color: "ORANGE"
+      event_color: "FLAMINGO"
 
     - dia: 31
       sprint: 4
@@ -285,7 +285,7 @@ planning_interval:
       fase: "fase.planejamento_refinamento"
       atividades: "atividades.planejamento_basico"
       observacoes: "observacoes.itens_novos_buffer15"
-      event_color: "YELLOW"
+      event_color: "PEACOCK"
 
     - dia: 32
       sprint: 4
@@ -293,7 +293,7 @@ planning_interval:
       fase: "fase.construcao"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
-      event_color: "GREEN"
+      event_color: "YELLOW"
 
     - dia: 33
       sprint: 4
@@ -301,7 +301,7 @@ planning_interval:
       fase: "fase.construcao"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
-      event_color: "GREEN"
+      event_color: "YELLOW"
 
     - dia: 34
       sprint: 4
@@ -309,7 +309,7 @@ planning_interval:
       fase: "fase.construcao"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
-      event_color: "GREEN"
+      event_color: "YELLOW"
 
     - dia: 35
       sprint: 4
@@ -317,7 +317,7 @@ planning_interval:
       fase: "fase.checkpoint"
       atividades: "atividades.checkpoint_verificacao"
       observacoes: "observacoes.ajustes_replanejamento"
-      event_color: "BLUE"
+      event_color: "RED"
 
     - dia: 36
       sprint: 4
@@ -326,7 +326,7 @@ planning_interval:
       atividades: "atividades.feature_testes"
       observacoes: "observacoes.entregas_continuas"
       eventos_pi: "eventos_pi.asc_quinzenal"
-      event_color: "GREEN"
+      event_color: "ORANGE"
 
     - dia: 37
       sprint: 4
@@ -334,7 +334,7 @@ planning_interval:
       fase: "fase.construcao_continuacao"
       atividades: "atividades.feature_testes"
       observacoes: "observacoes.entregas_continuas"
-      event_color: "GREEN"
+      event_color: "YELLOW"
 
     - dia: 38
       sprint: 4
@@ -342,7 +342,7 @@ planning_interval:
       fase: "fase.refactoring_estabilizacao"
       atividades: "atividades.consolidacao_estudos"
       observacoes: "observacoes.estudo_manha_50"
-      event_color: "RED"
+      event_color: "GRAPE"
 
     - dia: 39
       sprint: 4
@@ -350,7 +350,7 @@ planning_interval:
       fase: "fase.refactoring_estabilizacao"
       atividades: "atividades.consolidacao_estudos"
       observacoes: "observacoes.estudo_manha_50"
-      event_color: "RED"
+      event_color: "GRAPE"
 
     - dia: 40
       sprint: 4
@@ -358,7 +358,7 @@ planning_interval:
       fase: "fase.fechamento_retro"
       atividades: "atividades.changelog_review_ssc"
       observacoes: "observacoes.marco_release"
-      event_color: "ORANGE"
+      event_color: "FLAMINGO"
 
     - dia: 41
       sprint: 5
@@ -366,7 +366,7 @@ planning_interval:
       fase: "fase.planejamento_refinamento"
       atividades: "atividades.planejamento_basico"
       observacoes: "observacoes.itens_novos_buffer15"
-      event_color: "YELLOW"
+      event_color: "PEACOCK"
 
     - dia: 42
       sprint: 5
@@ -374,7 +374,7 @@ planning_interval:
       fase: "fase.construcao"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
-      event_color: "GREEN"
+      event_color: "YELLOW"
 
     - dia: 43
       sprint: 5
@@ -382,7 +382,7 @@ planning_interval:
       fase: "fase.construcao"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
-      event_color: "GREEN"
+      event_color: "YELLOW"
 
     - dia: 44
       sprint: 5
@@ -390,7 +390,7 @@ planning_interval:
       fase: "fase.construcao"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
-      event_color: "GREEN"
+      event_color: "YELLOW"
 
     - dia: 45
       sprint: 5
@@ -398,7 +398,7 @@ planning_interval:
       fase: "fase.checkpoint"
       atividades: "atividades.checkpoint_verificacao"
       observacoes: "observacoes.ajustes_replanejamento"
-      event_color: "BLUE"
+      event_color: "RED"
 
     - dia: 46
       sprint: 5
@@ -406,7 +406,7 @@ planning_interval:
       fase: "fase.construcao_continuacao"
       atividades: "atividades.feature_testes"
       observacoes: "observacoes.entregas_continuas"
-      event_color: "GREEN"
+      event_color: "YELLOW"
 
     - dia: 47
       sprint: 5
@@ -414,7 +414,7 @@ planning_interval:
       fase: "fase.construcao_continuacao"
       atividades: "atividades.feature_testes"
       observacoes: "observacoes.entregas_continuas"
-      event_color: "GREEN"
+      event_color: "YELLOW"
 
     - dia: 48
       sprint: 5
@@ -422,7 +422,7 @@ planning_interval:
       fase: "fase.refactoring_estabilizacao"
       atividades: "atividades.consolidacao_estudos"
       observacoes: "observacoes.estudo_manha_50"
-      event_color: "RED"
+      event_color: "GRAPE"
 
     - dia: 49
       sprint: 5
@@ -430,8 +430,8 @@ planning_interval:
       fase: "fase.refactoring_estabilizacao"
       atividades: "atividades.consolidacao_estudos"
       observacoes: "observacoes.estudo_manha_50"
-      eventos_pi: "eventos_pi.review_tech_day_1"
-      event_color: "RED"
+      56pi: "eventos_pi.review_tech_day_1"
+      event_color: "GRAPE"
 
     - dia: 50
       sprint: 5
@@ -440,4 +440,4 @@ planning_interval:
       atividades: "atividades.changelog_review_ssc"
       observacoes: "observacoes.marco_release"
       eventos_pi: "eventos_pi.review_tech_day_2_encerramento"
-      event_color: "ORANGE"
+      event_color: "FLAMINGO"

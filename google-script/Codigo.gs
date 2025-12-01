@@ -61,20 +61,34 @@ function syncPlanningIntervalSchedule() {
     const colorId =
       resolveColorId_(meta.event_color || meta.color || entry.event_color);
 
-    const faseTitulo = resolveKey_(translations, faseKey) || faseKey || '(Fase não definida)';
+    const faseTituloBase = resolveKey_(translations, faseKey) || faseKey || '(Fase não definida)';
     const atividadesTxt = resolveKey_(translations, atividadesKey) || atividadesKey;
     const observacoesTxt = resolveKey_(translations, observacoesKey) || observacoesKey;
+
+    // PI Day / Sprint usados na descrição E AGORA NO TÍTULO TAMBÉM
+    const piDay = safe(meta.pi_day || entry.pi_day);
+    const sprint = safe(meta.sprint || entry.sprint);
+    const dayInSprint = safe(meta.day_in_sprint || entry.day_in_sprint);
 
     // Descrição do evento principal (fase)
     const lines = [];
     if (atividadesTxt) lines.push(`Atividades: ${atividadesTxt}`);
     if (observacoesTxt) lines.push(`Observações: ${observacoesTxt}`);
     lines.push('');
-    lines.push(`PI Day: ${safe(meta.pi_day || entry.pi_day)}`);
-    lines.push(`Sprint: ${safe(meta.sprint || entry.sprint)}`);
-    lines.push(`Dia na Sprint: ${safe(meta.day_in_sprint || entry.day_in_sprint)}`);
+    lines.push(`PI Day: ${piDay}`);
+    lines.push(`Sprint: ${sprint}`);
+    lines.push(`Dia na Sprint: ${dayInSprint}`);
 
     const description = lines.filter(Boolean).join('\n');
+
+    // NOVO: monta sufixo de título com PI/Sprint
+    const titleSuffixParts = [];
+    if (piDay) titleSuffixParts.push(`PI ${piDay}`);
+    if (sprint) titleSuffixParts.push(`Sprint ${sprint}`);
+    const titleSuffix = titleSuffixParts.length ? ` — ${titleSuffixParts.join(' • ')}` : '';
+
+    // Título da fase com PI/Sprint
+    const faseTitulo = `${faseTituloBase}${titleSuffix}`;
 
     // Evento principal da fase (um por dia)
     items.push({
@@ -90,7 +104,11 @@ function syncPlanningIntervalSchedule() {
 
     // NOVO: Evento(s) de PI com agendamento próprio (se houver)
     if (eventosPiKey) {
-      const eventosPiTitulo = resolveKey_(translations, eventosPiKey) || eventosPiKey;
+      const eventosPiBaseTitulo = resolveKey_(translations, eventosPiKey) || eventosPiKey;
+
+      // Título do evento de PI também com PI/Sprint
+      const eventosPiTitulo = `${eventosPiBaseTitulo}${titleSuffix}`;
+
       const tw = resolveTimeWindow_(translations, eventosPiKey); // tenta achar horários
 
       if (tw && tw.start && tw.end) {

@@ -1,7 +1,8 @@
 translations:
   fase:
-    planejamento_pi: "PI Planning"
-    planejamento_refinamento: "Sprint Planning / ïnicio da Construção"
+    planejamento_pip1: "PI Planning 1/2"
+    planejamento_pip2: "PI Planning 2/2"
+    planejamento_refinamento: "Sprint Planning / Início da Construção"
     construcao: "Construção Contínua"
     checkpoint: "Checkpoint"
     construcao_continuacao: "Continuação da Construção"
@@ -39,19 +40,17 @@ planning_interval:
     - dia: 1
       sprint: 1
       dia_sprint: 1
-      fase: "fase.planejamento_pi"
+      fase: "fase.planejamento_pip1"
       atividades: "atividades.planejamento_pi_desdobramento"
       observacoes: "observacoes.itens_novos_buffer15_urgentes"
-      eventos_pi: "eventos_pi.pi_planning_dia1"
       event_color: "GRAPE"
 
     - dia: 2
       sprint: 1
       dia_sprint: 2
-      fase: "fase.planejamento_pi"
+      fase: "fase.planejamento_pip2"
       atividades: "atividades.analise_construcao"
       observacoes: "observacoes.desenvolvimento_incremental"
-      eventos_pi: "eventos_pi.pi_planning_dia2"
       event_color: "GRAPE"
 
     - dia: 3
@@ -405,7 +404,7 @@ planning_interval:
       sprint: 5
       dia_sprint: 6
       fase: "fase.construcao_continuacao"
-      atividades: "atividades.feature_testes"
+      atividades: "atgv ividades.feature_testes"
       observacoes: "observacoes.entregas_continuas"
       event_color: "YELLOW"
 

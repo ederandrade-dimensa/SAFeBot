@@ -1,20 +1,8 @@
 feriados:
-  - data: 2025-11-02
-    nome: "All Souls' Day"
-  - data: 2025-11-15
-    nome: Republic Day
-  - data: 2025-11-20
-    nome: Black Awareness Day
-  - data: 2025-12-24
-    nome: Christmas Eve
-  - data: 2025-12-25
-    nome: Christmas Day
-  - data: 2025-12-31
-    nome: "New Year's Eve"
   - data: 2026-01-01
     nome: "New Year's Day"
   - data: 2026-01-25
-    nome: SÃ£o Paulo Anniversary (Regional Holiday)
+    nome: São Paulo Anniversary (Regional Holiday)
   - data: 2026-02-16
     nome: Carnival
   - data: 2026-02-17
@@ -35,3 +23,11 @@ feriados:
     nome: Independence Day
   - data: 2026-10-12
     nome: Lady of Aparecida
+  - data: 2026-11-02
+    nome: "All Souls' Day"
+  - data: 2026-11-15
+    nome: Republic Day
+  - data: 2026-11-20
+    nome: Black Awareness Day
+  - data: 2026-12-25
+    nome: Christmas Day
